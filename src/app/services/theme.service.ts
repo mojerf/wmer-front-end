@@ -39,7 +39,8 @@ export class ThemeService {
 
   setTheme(isDark: boolean) {
     if (isPlatformBrowser(this.platformId)) {
-      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+      const localStorage = this.document.defaultView?.localStorage;
+      localStorage?.setItem('theme', isDark ? 'dark' : 'light');
     }
     this.isDark.next(isDark);
   }
