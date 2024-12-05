@@ -1,3 +1,8 @@
-<h1 class="text-3xl font-bold underline">Hello world!</h1>
-<h2 class="text-2xl">Mojtaba Erfan Rad is here :)</h2>
-<router-outlet></router-outlet>
+<div [class.dark]="isDark()">
+  <div
+    class="bg-neutral-100 text-neutral-800 dark:bg-neutral-800 dark:text-neutral-200"
+  >
+    salam
+    <router-outlet></router-outlet>
+  </div>
+</div>

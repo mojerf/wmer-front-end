@@ -1,13 +1,25 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  signal,
+} from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { ThemeService } from './services/theme.service';
 
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet],
-  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './app.component.html',
-  styles: [],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppComponent {
-  title = 'wmer-front-end';
+  private themeService = inject(ThemeService);
+
+  protected isDark = signal(true);
+  private isLoading = signal(false);
+
+  constructor() {
+    this.themeService.isDark$.subscribe((isDark) => this.isDark.set(isDark));
+  }
 }
