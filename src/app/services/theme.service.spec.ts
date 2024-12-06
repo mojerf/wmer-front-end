@@ -43,7 +43,7 @@ describe('ThemeService', () => {
 
   it('should return true if "dark" is stored in localStorage', (done) => {
     (
-      documentMock.defaultView!.localStorage!.getItem as jasmine.Spy
+      documentMock.defaultView!.localStorage.getItem as jasmine.Spy
     ).and.returnValue('dark');
 
     service = TestBed.inject(ThemeService);
@@ -73,12 +73,12 @@ describe('ThemeService', () => {
 
   it('should return false if there is no localStorage value and no preferred theme', (done) => {
     (
-      documentMock.defaultView!.localStorage!.getItem as jasmine.Spy
+      documentMock.defaultView!.localStorage.getItem as jasmine.Spy
     ).and.returnValue(null);
 
     (documentMock.defaultView!.matchMedia as jasmine.Spy).and.returnValue({
-      matches: false,
-    } as MediaQueryList);
+      matches: undefined,
+    });
 
     service = TestBed.inject(ThemeService);
 
