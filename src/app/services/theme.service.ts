@@ -9,7 +9,7 @@ export class ThemeService {
   private document = inject(DOCUMENT);
   private platformId = inject(PLATFORM_ID);
 
-  private isDark = new BehaviorSubject(true);
+  private isDark = new BehaviorSubject(false);
   isDark$ = this.isDark.asObservable();
 
   constructor() {
@@ -17,7 +17,19 @@ export class ThemeService {
     this.isDark.next(isDark);
   }
 
-  private getTheme() {
+  private getTheme(): boolean {
+    const localStorageColor = this.getLocalStorageColor();
+    if (typeof localStorageColor !== 'undefined') {
+      return localStorageColor;
+    }
+    const systemColor = this.getSystemColor();
+    if (typeof systemColor !== 'undefined') {
+      return systemColor;
+    }
+    return false;
+  }
+
+  private getLocalStorageColor(): boolean | undefined {
     if (isPlatformBrowser(this.platformId)) {
       const localStorage = this.document.defaultView?.localStorage;
       if (localStorage) {
@@ -26,6 +38,12 @@ export class ThemeService {
           return theme === 'dark';
         }
       }
+    }
+    return undefined;
+  }
+
+  private getSystemColor(): boolean | undefined {
+    if (isPlatformBrowser(this.platformId)) {
       const window = this.document.defaultView;
       if (window) {
         const browserDark = window.matchMedia(
@@ -34,10 +52,10 @@ export class ThemeService {
         return browserDark;
       }
     }
-    return true;
+    return undefined;
   }
 
-  setTheme(isDark: boolean) {
+  setThemeDark(isDark: boolean): void {
     if (isPlatformBrowser(this.platformId)) {
       const localStorage = this.document.defaultView?.localStorage;
       localStorage?.setItem('theme', isDark ? 'dark' : 'light');
