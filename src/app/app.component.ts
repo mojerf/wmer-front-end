@@ -11,6 +11,11 @@ import { ThemeService } from './core/services/theme.service';
   selector: 'app-root',
   imports: [RouterOutlet],
   templateUrl: './app.component.html',
+  styles: `
+    * {
+      @apply transition-colors duration-300;
+    }
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppComponent {

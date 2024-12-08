@@ -1,9 +1,10 @@
 import { Component, inject } from '@angular/core';
 import { Meta, Title } from '@angular/platform-browser';
+import { ToolbarComponent } from '../../components/toolbar/toolbar.component';
 
 @Component({
   selector: 'app-landing',
-  imports: [],
+  imports: [ToolbarComponent],
   templateUrl: './landing.component.html',
   styles: ``,
 })
