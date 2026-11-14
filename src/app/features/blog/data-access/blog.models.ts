@@ -20,6 +20,8 @@ export interface PostComment {
   authorName: string;
   body: string;
   createdAt: string;
+  /** The API says the signed-in user may delete it (their own comment, or an administrator). */
+  canDelete: boolean;
   replies: readonly PostComment[];
 }
 

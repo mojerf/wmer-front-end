@@ -28,6 +28,11 @@ export const serverRoutes: ServerRoute[] = [
       'Cache-Control': 'public, max-age=0, s-maxage=300, stale-while-revalidate=600',
     },
   },
+  // Account pages are per-visitor and need cookies the server does not have: render them in the browser.
+  { path: 'login', renderMode: RenderMode.Client },
+  { path: 'register', renderMode: RenderMode.Client },
+  { path: 'forgot-password', renderMode: RenderMode.Client },
+  { path: 'reset-password', renderMode: RenderMode.Client },
   { path: '404', renderMode: RenderMode.Server, status: 404 },
   { path: '**', renderMode: RenderMode.Server, status: 404 },
 ];

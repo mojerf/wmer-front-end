@@ -4,6 +4,7 @@ import { APP_CONFIG, AppConfig } from '../app/core/config/app-config';
 export const TEST_CONFIG: AppConfig = {
   production: false,
   apiUrl: 'http://api.test/api',
+  csrfUrl: 'http://api.test/api/csrf-cookie',
   siteUrl: 'https://site.test',
   useMockApi: true,
 };

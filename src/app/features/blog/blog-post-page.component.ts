@@ -1,16 +1,31 @@
-import { ChangeDetectionStrategy, Component, effect, inject, input } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  effect,
+  inject,
+  input,
+  linkedSignal,
+  signal,
+} from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { SITE } from '../../core/config/site.config';
 import { SeoService } from '../../core/seo/seo.service';
 import { FaNumberPipe } from '../../shared/pipes/fa-number.pipe';
 import { RelativeTimePipe } from '../../shared/pipes/relative-time.pipe';
+import { BlogApi } from './data-access/blog.api';
 import { excerpt } from './data-access/blog.mapper';
+import { PostComment } from './data-access/blog.models';
 import { BlogPostData } from './data-access/blog.resolvers';
+import { CommentFormComponent } from './ui/comment-form.component';
 import { CommentListComponent } from './ui/comment-list.component';
+
+const countAll = (comments: readonly PostComment[]): number =>
+  comments.reduce((sum, c) => sum + 1 + countAll(c.replies), 0);
 
 @Component({
   selector: 'app-blog-post-page',
-  imports: [RouterLink, RelativeTimePipe, FaNumberPipe, CommentListComponent],
+  imports: [RouterLink, RelativeTimePipe, FaNumberPipe, CommentListComponent, CommentFormComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     @let post = data().post;
@@ -33,7 +48,7 @@ import { CommentListComponent } from './ui/comment-list.component';
         }
         <time [attr.datetime]="post.publishedAt">{{ post.publishedAt | relativeTime }}</time>
         <span aria-hidden="true">·</span>
-        <span>{{ post.commentsCount | faNumber }} نظر</span>
+        <span>{{ total() | faNumber }} نظر</span>
       </p>
 
       @if (post.imageUrl) {
@@ -49,24 +64,47 @@ import { CommentListComponent } from './ui/comment-list.component';
 
     <section class="wrap max-w-[48rem] pb-10" aria-labelledby="comments-title">
       <h2 id="comments-title" class="mb-4 text-[1.375rem] font-black">
-        نظرها ({{ post.commentsCount | faNumber }})
+        نظرها ({{ total() | faNumber }})
       </h2>
 
-      @if (data().comments.length) {
-        <app-comment-list [comments]="data().comments" />
+      @if (comments().length) {
+        <app-comment-list [comments]="comments()" (reply)="replyTo.set($event)" (remove)="remove($event)" />
       } @else {
         <p class="rounded-[1.25rem] border border-line bg-card p-6 text-center text-mut">
           هنوز نظری ثبت نشده است.
         </p>
       }
 
-      <p class="mt-4 text-[0.8125rem] text-mut">ثبت نظر پس از فعال شدن ورود به حساب ممکن می‌شود.</p>
+      <div class="mt-6" id="comment-form">
+        <app-comment-form
+          [slug]="post.slug"
+          [replyTo]="replyTo()"
+          (posted)="refresh()"
+          (cancelReply)="replyTo.set(null)"
+        />
+      </div>
     </section>
   `,
 })
 export class BlogPostPageComponent {
   /** Provided by the route resolver through component input binding. */
   readonly data = input.required<BlogPostData>();
+
+  private readonly api = inject(BlogApi);
+
+  /** Starts from the resolved comments and is replaced after a comment is posted or deleted. */
+  protected readonly comments = linkedSignal(() => this.data().comments);
+  protected readonly replyTo = signal<PostComment | null>(null);
+  protected readonly total = computed(() => countAll(this.comments()));
+
+  protected refresh(): void {
+    this.replyTo.set(null);
+    this.api.comments(this.data().post.slug).subscribe((comments) => this.comments.set(comments));
+  }
+
+  protected remove(comment: PostComment): void {
+    this.api.deleteComment(comment.id).subscribe(() => this.refresh());
+  }
 
   constructor() {
     const seo = inject(SeoService);

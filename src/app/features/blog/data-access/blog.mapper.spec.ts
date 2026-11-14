@@ -47,7 +47,7 @@ describe('blog mappers', () => {
       parent_id: null,
       body: 'سلام',
       created_at: '2026-01-01T00:00:00+00:00',
-      can_delete: false,
+      can_delete: true,
       replies: [
         {
           id: 2,
@@ -60,6 +60,7 @@ describe('blog mappers', () => {
       ],
     };
     const comment = toPostComment(dto);
+    expect(comment.canDelete).toBe(true);
     expect(comment.replies).toHaveLength(1);
     expect(comment.replies[0]?.replies).toEqual([]);
   });

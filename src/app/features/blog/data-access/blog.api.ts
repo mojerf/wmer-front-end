@@ -13,12 +13,15 @@ export abstract class BlogApi {
   abstract list(query: PostListQuery): Observable<Page<PostSummary>>;
   abstract post(slug: string): Observable<PostDetail>;
   abstract comments(slug: string): Observable<readonly PostComment[]>;
+  abstract addComment(slug: string, body: string, parentId: number | null): Observable<void>;
+  abstract deleteComment(id: number): Observable<void>;
 }
 
 @Injectable()
 export class HttpBlogApi extends BlogApi {
   private readonly http = inject(HttpClient);
-  private readonly base = `${inject(APP_CONFIG).apiUrl}/posts`;
+  private readonly api = inject(APP_CONFIG).apiUrl;
+  private readonly base = `${this.api}/posts`;
 
   list(query: PostListQuery): Observable<Page<PostSummary>> {
     let params = new HttpParams().set('page', query.page);
@@ -40,6 +43,18 @@ export class HttpBlogApi extends BlogApi {
     return this.http
       .get<PaginatedDto<CommentDto>>(`${this.base}/${encodeURIComponent(slug)}/comments`)
       .pipe(map((dto) => dto.data.map(toPostComment)));
+  }
+
+  addComment(slug: string, body: string, parentId: number | null): Observable<void> {
+    return this.http
+      .post(`${this.base}/${encodeURIComponent(slug)}/comments`, { body, parent_id: parentId })
+      .pipe(map(() => undefined));
+  }
+
+  deleteComment(id: number): Observable<void> {
+    return this.http
+      .delete(`${this.api}/comments/${id}`)
+      .pipe(map(() => undefined));
   }
 }
 
@@ -87,8 +102,16 @@ export class MockBlogApi extends BlogApi {
   comments(slug: string): Observable<readonly PostComment[]> {
     return of(
       slug === 'zoneless-angular'
-        ? [{ id: 1, authorName: 'علی', body: 'نوشته‌ی خوبی بود.', createdAt: daysAgo(1), replies: [] }]
+        ? [{ id: 1, authorName: 'علی', body: 'نوشته‌ی خوبی بود.', createdAt: daysAgo(1), canDelete: false, replies: [] }]
         : [],
     );
+  }
+
+  addComment(): Observable<void> {
+    return of(undefined);
+  }
+
+  deleteComment(): Observable<void> {
+    return of(undefined);
   }
 }

@@ -4,6 +4,7 @@ export const environment: AppConfig = {
   production: true,
   // TODO: replace with the real production origins before deploying.
   apiUrl: 'https://api.example.com/api/v1',
+  csrfUrl: 'https://api.example.com/api/csrf-cookie',
   siteUrl: 'https://www.example.com',
   useMockApi: true,
 };

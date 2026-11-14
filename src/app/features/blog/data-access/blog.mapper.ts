@@ -27,6 +27,7 @@ export const toPostComment = (dto: CommentDto): PostComment => ({
   authorName: dto.author_name,
   body: dto.body,
   createdAt: dto.created_at,
+  canDelete: dto.can_delete,
   replies: (dto.replies ?? []).map(toPostComment),
 });
 

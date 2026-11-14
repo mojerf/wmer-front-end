@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 import { RelativeTimePipe } from '../../../shared/pipes/relative-time.pipe';
 import { PostComment } from '../data-access/blog.models';
 
@@ -22,9 +22,24 @@ import { PostComment } from '../data-access/blog.models';
           </div>
           <p class="text-[0.9375rem] leading-[1.9] whitespace-pre-line">{{ comment.body }}</p>
 
+          @if (allowReply() || comment.canDelete) {
+            <div class="mt-2 flex gap-4 text-[0.8125rem] text-mut">
+              @if (allowReply()) {
+                <button type="button" class="cursor-pointer hover:text-fg" (click)="reply.emit(comment)">پاسخ</button>
+              }
+              @if (comment.canDelete) {
+                <button type="button" class="cursor-pointer hover:text-rose" (click)="remove.emit(comment)">حذف</button>
+              }
+            </div>
+          }
+
           @if (comment.replies.length) {
             <div class="mt-3 border-s-2 border-line ps-4">
-              <app-comment-list [comments]="comment.replies" />
+              <app-comment-list
+                [comments]="comment.replies"
+                [allowReply]="false"
+                (remove)="remove.emit($event)"
+              />
             </div>
           }
         </li>
@@ -34,6 +49,11 @@ import { PostComment } from '../data-access/blog.models';
 })
 export class CommentListComponent {
   readonly comments = input.required<readonly PostComment[]>();
+  /** Replies are one level deep, so replies themselves cannot be answered. */
+  readonly allowReply = input(true);
+
+  readonly reply = output<PostComment>();
+  readonly remove = output<PostComment>();
 
   protected initial(name: string): string {
     return Array.from(name.trim())[0] ?? '؟';

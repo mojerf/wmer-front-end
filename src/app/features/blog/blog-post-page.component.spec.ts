@@ -4,6 +4,7 @@ import { provideRouter } from '@angular/router';
 import { describe, expect, it } from 'vitest';
 import { provideTestConfig } from '../../../testing/test-providers';
 import { BlogPostPageComponent } from './blog-post-page.component';
+import { BlogApi, MockBlogApi } from './data-access/blog.api';
 import { BlogPostData } from './data-access/blog.resolvers';
 
 const data: BlogPostData = {
@@ -24,8 +25,16 @@ const data: BlogPostData = {
       authorName: 'علی',
       body: '<b>bold?</b> سلام',
       createdAt: '2026-01-03T00:00:00+00:00',
+      canDelete: false,
       replies: [
-        { id: 2, authorName: 'رضا', body: 'جواب', createdAt: '2026-01-04T00:00:00+00:00', replies: [] },
+        {
+          id: 2,
+          authorName: 'رضا',
+          body: 'جواب',
+          createdAt: '2026-01-04T00:00:00+00:00',
+          canDelete: false,
+          replies: [],
+        },
       ],
     },
   ],
@@ -35,7 +44,11 @@ describe('BlogPostPageComponent', () => {
   const create = async () => {
     await TestBed.configureTestingModule({
       imports: [BlogPostPageComponent],
-      providers: [provideRouter([]), ...provideTestConfig()],
+      providers: [
+        provideRouter([]),
+        ...provideTestConfig(),
+        { provide: BlogApi, useClass: MockBlogApi },
+      ],
     }).compileComponents();
     const fixture = TestBed.createComponent(BlogPostPageComponent);
     fixture.componentRef.setInput('data', data);

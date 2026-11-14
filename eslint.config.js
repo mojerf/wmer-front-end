@@ -9,7 +9,7 @@ const angular = require("angular-eslint");
 // core    -> may not import layout or features
 // layout  -> may not import features
 // feature -> may not import layout or another feature
-const FEATURES = ["home", "blog", "not-found"];
+const FEATURES = ["home", "blog", "auth", "not-found"];
 const forbid = (files, groups, message) => ({
   files,
   rules: {

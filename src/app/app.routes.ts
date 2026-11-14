@@ -10,6 +10,10 @@ export const routes: Routes = [
     path: 'blog',
     loadChildren: () => import('./features/blog/blog.routes').then((m) => m.BLOG_ROUTES),
   },
+  {
+    path: '',
+    loadChildren: () => import('./features/auth/auth.routes').then((m) => m.AUTH_ROUTES),
+  },
   // Explicit target for failed lookups (API 404); also answered with HTTP 404 by the server.
   {
     path: '404',

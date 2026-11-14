@@ -169,6 +169,21 @@
     box-shadow 0.45s;
 }
 
+/* Text inputs and textareas (rounded, themed, visible focus). */
+@utility input-field {
+  @apply min-h-12 w-full rounded-full border border-line bg-card px-5 text-[0.9375rem] text-fg outline-none placeholder:text-mut;
+  transition: border-color 0.2s;
+}
+.input-field:focus {
+  border-color: var(--iris);
+}
+.input-field[aria-invalid='true'] {
+  border-color: var(--rose);
+}
+textarea.input-field {
+  @apply rounded-[1.25rem] py-3;
+}
+
 @utility wrap {
   width: min(67.5rem, calc(100% - 1.75rem));
   margin-inline: auto;

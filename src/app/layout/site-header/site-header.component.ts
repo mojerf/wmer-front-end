@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
+import { AuthService } from '../../core/auth/auth.service';
 import { PaletteService } from '../command-palette/palette.service';
 import { ThemeSwitchComponent } from '../theme-switch/theme-switch.component';
 
@@ -39,11 +40,26 @@ import { ThemeSwitchComponent } from '../theme-switch/theme-switch.component';
           type="button"
           (click)="palette.show()"
           aria-label="جستجو و پیمایش سریع"
-          class="flex cursor-pointer items-center gap-2.5 rounded-full border border-line px-3 py-1.5 text-[0.8125rem] text-mut transition-colors hover:text-fg"
+          class="flex cursor-pointer items-center gap-2.5 rounded-full border border-line px-3 py-1.5 text-[0.8125rem] text-mut transition-colors hover:text-fg max-[520px]:hidden"
         >
           <span class="max-[820px]:hidden">جستجو</span>
           <kbd class="rounded-[0.375rem] bg-line px-1.5 font-mono text-[0.6875rem]" dir="ltr">Ctrl K</kbd>
         </button>
+
+        @if (auth.isLoggedIn()) {
+          <span class="flex items-center gap-2 rounded-full border border-line py-1 ps-1 pe-3 text-[0.8125rem]">
+            <span
+              class="grid size-7 place-items-center rounded-full bg-bg-2 text-[0.75rem] font-bold"
+              aria-hidden="true"
+              >{{ initial() }}</span
+            >
+            <span class="max-w-[7rem] truncate max-[820px]:hidden">{{ auth.displayName() }}</span>
+            <button type="button" class="cursor-pointer text-mut hover:text-fg" (click)="logout()">خروج</button>
+          </span>
+        } @else {
+          <a routerLink="/login" class="btn btn-main min-h-9 px-4 text-[0.8125rem]">ورود</a>
+        }
+
         <app-theme-switch />
       </div>
     </header>
@@ -51,6 +67,8 @@ import { ThemeSwitchComponent } from '../theme-switch/theme-switch.component';
 })
 export class SiteHeaderComponent {
   protected readonly palette = inject(PaletteService);
+  protected readonly auth = inject(AuthService);
+  private readonly router = inject(Router);
 
   protected readonly links = [
     { route: '/', fragment: 'works', label: 'نمونه‌کارها' },
@@ -58,4 +76,12 @@ export class SiteHeaderComponent {
     { route: '/', fragment: 'shop', label: 'فروشگاه' },
     { route: '/', fragment: 'contact', label: 'تماس' },
   ] as const;
+
+  protected initial(): string {
+    return Array.from(this.auth.displayName())[0] ?? '';
+  }
+
+  protected logout(): void {
+    this.auth.logout().subscribe(() => void this.router.navigateByUrl('/'));
+  }
 }
