@@ -8,6 +8,7 @@ import compression from 'compression';
 import express from 'express';
 import { join } from 'node:path';
 import { SITE } from './app/core/config/site.config';
+import { buildCsp, inlineScriptHashes } from './csp';
 import { buildRobots, buildRss, buildSitemap, cached, fetchAllItems } from './seo-feeds';
 
 const browserDistFolder = join(import.meta.dirname, '../browser');
@@ -29,7 +30,7 @@ const angularApp = new AngularNodeAppEngine({
 /** gzip/deflate for text responses (HTML, JS, CSS, JSON, XML). Images are already compressed and skipped. */
 app.use(compression());
 
-/** Baseline security headers (a strict CSP is added in a later step). */
+/** Baseline security headers (the Content-Security-Policy is added per page below, because it depends on the page). */
 app.use((_req, res, next) => {
   res.setHeader('X-Content-Type-Options', 'nosniff');
   res.setHeader('X-Frame-Options', 'DENY');
@@ -101,9 +102,31 @@ app.use(
 app.use((req, res, next) => {
   angularApp
     .handle(req)
-    .then((response) =>
-      response ? writeResponseToNodeResponse(response, res) : next(),
-    )
+    .then(async (response) => {
+      if (!response) {
+        return next();
+      }
+      if (!(response.headers.get('content-type') ?? '').includes('text/html')) {
+        return writeResponseToNodeResponse(response, res);
+      }
+
+      // Pages get a Content-Security-Policy that allows exactly the inline scripts they contain (see csp.ts).
+      const html = await response.text();
+      const headers = new Headers(response.headers);
+      headers.delete('content-length');
+      headers.set(
+        'Content-Security-Policy',
+        buildCsp({
+          scriptHashes: inlineScriptHashes(html),
+          apiOrigin: new URL(apiUrl).origin,
+          upgradeInsecure: siteUrl.startsWith('https://'),
+        }),
+      );
+      return writeResponseToNodeResponse(
+        new Response(html, { status: response.status, statusText: response.statusText, headers }),
+        res,
+      );
+    })
     .catch(next);
 });
 
