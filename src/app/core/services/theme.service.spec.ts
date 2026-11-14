@@ -1,9 +1,10 @@
 import { TestBed } from '@angular/core/testing';
 import { ThemeService } from './theme.service';
-import { DOCUMENT } from '@angular/common';
+
 import {
   PLATFORM_ID,
   provideExperimentalZonelessChangeDetection,
+  DOCUMENT
 } from '@angular/core';
 
 describe('ThemeService', () => {
