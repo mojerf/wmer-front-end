@@ -3,6 +3,7 @@ import { rxResource } from '@angular/core/rxjs-interop';
 import { errorMessage } from '../../core/http/api-errors';
 import { FaNumberPipe } from '../../shared/pipes/fa-number.pipe';
 import { RelativeTimePipe } from '../../shared/pipes/relative-time.pipe';
+import { ConfirmService } from '../../shared/ui/confirm/confirm.service';
 import { AdminApi } from './data-access/admin.api';
 import { AdminContact } from './data-access/admin.models';
 import { IconComponent } from '../../shared/ui/icon/icon.component';
@@ -56,6 +57,7 @@ import { IconComponent } from '../../shared/ui/icon/icon.component';
 })
 export class AdminContactsPageComponent {
   private readonly api = inject(AdminApi);
+  private readonly confirm = inject(ConfirmService);
 
   protected readonly notice = signal<string | null>(null);
   protected readonly pageNumber = signal(1);
@@ -66,8 +68,14 @@ export class AdminContactsPageComponent {
     stream: ({ params }) => this.api.contacts(params.page),
   });
 
-  protected remove(contact: AdminContact): void {
-    if (!confirm('این پیام حذف شود؟')) {
+  protected async remove(contact: AdminContact): Promise<void> {
+    const confirmed = await this.confirm.ask({
+      title: 'این پیام حذف شود؟',
+      message: `پیام «${contact.title}» برای همیشه پاک می‌شود.`,
+      confirmLabel: 'حذف',
+      danger: true,
+    });
+    if (!confirmed) {
       return;
     }
     this.api.removeContact(contact.id).subscribe({

@@ -4,6 +4,7 @@ import { RouterLink } from '@angular/router';
 import { errorMessage } from '../../core/http/api-errors';
 import { FaNumberPipe } from '../../shared/pipes/fa-number.pipe';
 import { RelativeTimePipe } from '../../shared/pipes/relative-time.pipe';
+import { ConfirmService } from '../../shared/ui/confirm/confirm.service';
 import { AdminApi } from './data-access/admin.api';
 import { CONTENT_SCHEMAS, ContentRow, isContentType } from './data-access/admin.models';
 import { IconComponent } from '../../shared/ui/icon/icon.component';
@@ -75,6 +76,7 @@ export class AdminContentListPageComponent {
   readonly type = input<string>();
 
   private readonly api = inject(AdminApi);
+  private readonly confirm = inject(ConfirmService);
 
   protected readonly schema = computed(() => {
     const type = this.type();
@@ -109,9 +111,18 @@ export class AdminContentListPageComponent {
     this.pageNumber.set(page);
   }
 
-  protected remove(row: ContentRow): void {
+  protected async remove(row: ContentRow): Promise<void> {
     const schema = this.schema();
-    if (!schema || !confirm(`«${row.title}» برای همیشه حذف شود؟`)) {
+    if (!schema) {
+      return;
+    }
+    const confirmed = await this.confirm.ask({
+      title: `«${row.title}» حذف شود؟`,
+      message: 'این کار قابل بازگشت نیست.',
+      confirmLabel: 'حذف',
+      danger: true,
+    });
+    if (!confirmed) {
       return;
     }
     this.api.remove(schema.type, row.id).subscribe({

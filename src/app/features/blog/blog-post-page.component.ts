@@ -19,6 +19,7 @@ import { PostComment } from './data-access/blog.models';
 import { BlogPostData } from './data-access/blog.resolvers';
 import { CommentFormComponent } from './ui/comment-form.component';
 import { CommentListComponent } from './ui/comment-list.component';
+import { ConfirmService } from '../../shared/ui/confirm/confirm.service';
 
 const countAll = (comments: readonly PostComment[]): number =>
   comments.reduce((sum, c) => sum + 1 + countAll(c.replies), 0);
@@ -92,6 +93,7 @@ export class BlogPostPageComponent {
   readonly data = input.required<BlogPostData>();
 
   private readonly api = inject(BlogApi);
+  private readonly confirm = inject(ConfirmService);
 
   /** Starts from the resolved comments and is replaced after a comment is posted or deleted. */
   protected readonly comments = linkedSignal(() => this.data().comments);
@@ -103,8 +105,16 @@ export class BlogPostPageComponent {
     this.api.comments(this.data().post.slug).subscribe((comments) => this.comments.set(comments));
   }
 
-  protected remove(comment: PostComment): void {
-    this.api.deleteComment(comment.id).subscribe(() => this.refresh());
+  protected async remove(comment: PostComment): Promise<void> {
+    const confirmed = await this.confirm.ask({
+      title: 'این نظر حذف شود؟',
+      message: 'پاسخ‌های زیر آن هم حذف می‌شوند.',
+      confirmLabel: 'حذف',
+      danger: true,
+    });
+    if (confirmed) {
+      this.api.deleteComment(comment.id).subscribe(() => this.refresh());
+    }
   }
 
   constructor() {
