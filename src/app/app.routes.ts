@@ -11,6 +11,14 @@ export const routes: Routes = [
     loadChildren: () => import('./features/blog/blog.routes').then((m) => m.BLOG_ROUTES),
   },
   {
+    path: 'contact',
+    loadChildren: () => import('./features/contact/contact.routes').then((m) => m.CONTACT_ROUTES),
+  },
+  {
+    path: 'about',
+    loadComponent: () => import('./features/about/about-page.component').then((m) => m.AboutPageComponent),
+  },
+  {
     path: 'shop',
     loadChildren: () => import('./features/shop/shop.routes').then((m) => m.SHOP_ROUTES),
   },

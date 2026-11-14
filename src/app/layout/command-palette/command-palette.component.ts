@@ -84,7 +84,8 @@ export class CommandPaletteComponent {
     { label: 'وبلاگ', hint: 'G B', run: () => void this.router.navigate(['/blog']) },
     { label: 'فروشگاه', hint: 'G S', run: () => void this.router.navigate(['/shop']) },
     { label: 'سبد خرید', hint: 'G C', run: () => void this.router.navigate(['/cart']) },
-    { label: 'تماس', hint: 'G T', run: () => this.goTo('contact') },
+    { label: 'درباره‌ی من', hint: 'G A', run: () => void this.router.navigate(['/about']) },
+    { label: 'تماس', hint: 'G T', run: () => void this.router.navigate(['/contact']) },
     { label: 'تغییر تم', hint: 'T', run: () => this.theme.toggle() },
     {
       label: 'سورس‌کد در GitHub',

@@ -1,10 +1,11 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { RevealDirective } from '../../../shared/directives/reveal.directive';
 import { IconComponent } from '../../../shared/ui/icon/icon.component';
 
 @Component({
   selector: 'app-contact-section',
-  imports: [RevealDirective, IconComponent],
+  imports: [RevealDirective, IconComponent, RouterLink],
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: { class: 'wrap block pt-[5.625rem]', id: 'contact' },
   template: `
@@ -18,9 +19,7 @@ import { IconComponent } from '../../../shared/ui/icon/icon.component';
       <p class="mx-auto mt-3.5 mb-7 max-w-[35rem] text-[clamp(1rem,2vw,1.25rem)] text-mut">
         پروژه‌ات را برایم بنویس؛ معمولاً همان روز جواب می‌دهم.
       </p>
-      <button type="button" class="btn btn-main cursor-pointer">
-        ارسال پیام <app-icon name="arrow" />
-      </button>
+      <a routerLink="/contact" class="btn btn-main">ارسال پیام <app-icon name="arrow" /></a>
     </div>
   `,
 })

@@ -92,7 +92,8 @@ export class SiteHeaderComponent {
     { route: '/', fragment: 'works', label: 'نمونه‌کارها' },
     { route: '/blog', fragment: undefined, label: 'وبلاگ' },
     { route: '/shop', fragment: undefined, label: 'فروشگاه' },
-    { route: '/', fragment: 'contact', label: 'تماس' },
+    { route: '/about', fragment: undefined, label: 'درباره' },
+    { route: '/contact', fragment: undefined, label: 'تماس' },
   ] as const;
 
   protected initial(): string {

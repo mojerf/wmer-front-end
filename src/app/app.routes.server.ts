@@ -14,6 +14,9 @@ export const serverRoutes: ServerRoute[] = [
       'Cache-Control': 'public, max-age=0, s-maxage=300, stale-while-revalidate=600',
     },
   },
+  // Static pages (no API data) are rendered once at build time.
+  { path: 'about', renderMode: RenderMode.Prerender },
+  { path: 'contact', renderMode: RenderMode.Prerender },
   {
     path: 'blog',
     renderMode: RenderMode.Server,
