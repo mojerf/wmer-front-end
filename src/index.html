@@ -1,22 +1,35 @@
 <!doctype html>
-<html lang="fa">
+<html lang="fa" dir="rtl">
   <head>
     <meta charset="utf-8" />
-    <title>مجتبی عرفان راد | طراحی و برنامه نویسی وب اپلیکیشن</title>
+    <title>مجتبی عرفان‌راد | طراحی و برنامه‌نویسی وب‌اپلیکیشن</title>
     <base href="/" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="dark light" />
+    <meta name="theme-color" content="#0b0b10" />
     <link rel="icon" type="image/x-icon" href="favicon.ico" />
     <link rel="manifest" href="manifest.webmanifest" />
-    <meta name="theme-color" content="#1976d2" />
     <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0"
+      rel="preload"
+      href="/assets/fonts/woff2/IRANSansX-Regular.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
     />
+    <link
+      rel="preload"
+      href="/assets/fonts/woff2/IRANSansX-Bold.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <script src="theme-init.js"></script>
   </head>
-  <body dir="rtl">
+  <body>
     <app-root></app-root>
     <noscript>
-      Please enable JavaScript to continue using this application.
+      این سایت برای تجربه‌ی کامل به جاوااسکریپت نیاز دارد، اما محتوای اصلی بدون
+      آن هم قابل مشاهده است.
     </noscript>
   </body>
 </html>

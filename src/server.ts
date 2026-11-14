@@ -10,9 +10,28 @@ import { join } from 'node:path';
 const browserDistFolder = join(import.meta.dirname, '../browser');
 
 const app = express();
+app.disable('x-powered-by');
+
+/**
+ * Only trust X-Forwarded-* headers when the server really sits behind your own reverse proxy
+ * (set TRUST_PROXY=true there). Trusting them on a directly exposed server lets clients spoof the host.
+ */
 const angularApp = new AngularNodeAppEngine({
-  // TODO: This is a security-sensitive option. Remove if not needed. For more information, see https://angular.dev/best-practices/security#configuring-trusted-proxy-headers
-  trustProxyHeaders: ['x-forwarded-host', 'x-forwarded-proto'],
+  /** Hosts this server answers for (comma separated env var). Requests with any other Host header get a 400. */
+  allowedHosts: (process.env['ALLOWED_HOSTS'] ?? 'localhost').split(',').map((h) => h.trim()),
+  trustProxyHeaders:
+    process.env['TRUST_PROXY'] === 'true' ? ['x-forwarded-host', 'x-forwarded-proto'] : false,
+});
+
+/** Baseline security headers (a strict CSP is added in a later step). */
+app.use((_req, res, next) => {
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('X-Frame-Options', 'DENY');
+  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+  res.setHeader('Cross-Origin-Opener-Policy', 'same-origin');
+  res.setHeader('Permissions-Policy', 'camera=(), microphone=(), geolocation=(), payment=()');
+  res.setHeader('Strict-Transport-Security', 'max-age=63072000; includeSubDomains');
+  next();
 });
 
 /** Serve static files from /browser */
@@ -21,6 +40,12 @@ app.use(
     maxAge: '1y',
     index: false,
     redirect: false,
+    // Files that are not content-hashed must always be revalidated, or updates never reach users.
+    setHeaders: (res, path) => {
+      if (/(ngsw-worker\.js|ngsw\.json|safety-worker\.js|worker-basic\.min\.js|manifest\.webmanifest|theme-init\.js|robots\.txt|sitemap\.xml)$/.test(path)) {
+        res.setHeader('Cache-Control', 'no-cache');
+      }
+    },
   }),
 );
 

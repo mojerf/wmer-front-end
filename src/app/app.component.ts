@@ -1,30 +1,13 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  signal,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { ThemeService } from './core/services/theme.service';
+import { CommandPaletteComponent } from './layout/command-palette/command-palette.component';
+import { SiteFooterComponent } from './layout/site-footer/site-footer.component';
+import { SiteHeaderComponent } from './layout/site-header/site-header.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, SiteHeaderComponent, SiteFooterComponent, CommandPaletteComponent],
   templateUrl: './app.component.html',
-  styles: `
-    * {
-      @apply transition-colors duration-300;
-    }
-  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AppComponent {
-  private themeService = inject(ThemeService);
-
-  protected isDark = signal(true);
-  private isLoading = signal(false);
-
-  constructor() {
-    this.themeService.isDark$.subscribe((isDark) => this.isDark.set(isDark));
-  }
-}
+export class AppComponent {}

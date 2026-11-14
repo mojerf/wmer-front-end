@@ -3,6 +3,33 @@ const eslint = require("@eslint/js");
 const tseslint = require("typescript-eslint");
 const angular = require("angular-eslint");
 
+
+// ---- Architecture boundaries -------------------------------------------------------------
+// shared  -> may not import core, layout or features
+// core    -> may not import layout or features
+// layout  -> may not import features
+// feature -> may not import layout or another feature
+const FEATURES = ["home", "not-found"];
+const forbid = (files, groups, message) => ({
+  files,
+  rules: {
+    "no-restricted-imports": ["error", { patterns: groups.map((group) => ({ group: [group], message })) }],
+  },
+});
+
+const boundaries = [
+  forbid(["src/app/shared/**/*.ts"], ["**/core/**", "**/layout/**", "**/features/**"], "shared code must stay independent of core, layout and features."),
+  forbid(["src/app/core/**/*.ts"], ["**/layout/**", "**/features/**"], "core must not depend on layout or features."),
+  forbid(["src/app/layout/**/*.ts"], ["**/features/**"], "layout must not depend on features."),
+  ...FEATURES.map((name) =>
+    forbid(
+      [`src/app/features/${name}/**/*.ts`],
+      ["**/layout/**", ...FEATURES.filter((f) => f !== name).map((f) => `**/features/${f}/**`)],
+      "a feature may only use core and shared; features must not import each other or layout.",
+    ),
+  ),
+];
+
 module.exports = tseslint.config(
   {
     files: ["**/*.ts"],
@@ -39,5 +66,6 @@ module.exports = tseslint.config(
       ...angular.configs.templateAccessibility,
     ],
     rules: {},
-  }
+  },
+  ...boundaries,
 );

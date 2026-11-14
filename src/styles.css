@@ -1,24 +1,303 @@
 @import 'tailwindcss';
+
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* ---------- Fonts ---------- */
 @font-face {
-  font-family: IRANSansX;
+  font-family: 'IRANSansX';
   font-style: normal;
-  font-weight: bold;
+  font-weight: 700;
+  font-display: swap;
   src:
-    url("/assets/fonts/woff/IRANSansX-Bold.woff") format("woff"),
-    url("/assets/fonts/woff2/IRANSansX-Bold.woff2") format("woff2");
+    url('/assets/fonts/woff2/IRANSansX-Bold.woff2') format('woff2'),
+    url('/assets/fonts/woff/IRANSansX-Bold.woff') format('woff');
 }
 
 @font-face {
-  font-family: IRANSansX;
+  font-family: 'IRANSansX';
   font-style: normal;
-  font-weight: normal;
+  font-weight: 400;
+  font-display: swap;
   src:
-    url("/assets/fonts/woff/IRANSansX-Regular.woff") format("woff"),
-    url("/assets/fonts/woff2/IRANSansX-Regular.woff2") format("woff2");
+    url('/assets/fonts/woff2/IRANSansX-Regular.woff2') format('woff2'),
+    url('/assets/fonts/woff/IRANSansX-Regular.woff') format('woff');
 }
 
-body {
-  font-family: IRANSansX;
+/* ---------- Theme tokens (light is the base, .dark overrides) ---------- */
+:root {
+  --bg: #f6f5f1;
+  --bg-2: #ecebe5;
+  --card: #ffffff;
+  --line: rgb(0 0 0 / 0.08);
+  --fg: #14141a;
+  --mut: #62627a;
+  --iris: #7c5cff;
+  --aqua: #22d3ee;
+  --rose: #ff5c8a;
+  --glow: 0.25;
+  color-scheme: light;
+}
+
+.dark {
+  --bg: #0b0b10;
+  --bg-2: #12121a;
+  --card: #14141d;
+  --line: rgb(255 255 255 / 0.08);
+  --fg: #f4f4f8;
+  --mut: #9a9ab0;
+  --glow: 0.55;
+  color-scheme: dark;
+}
+
+@theme inline {
+  --font-sans: 'IRANSansX', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+
+  --color-bg: var(--bg);
+  --color-bg-2: var(--bg-2);
+  --color-card: var(--card);
+  --color-line: var(--line);
+  --color-fg: var(--fg);
+  --color-mut: var(--mut);
+  --color-iris: var(--iris);
+  --color-aqua: var(--aqua);
+  --color-rose: var(--rose);
+}
+
+@theme {
+  --animate-float: float 14s ease-in-out infinite alternate;
+  --animate-marquee: marquee 28s linear infinite;
+  --animate-bob: bob 7s ease-in-out infinite alternate;
+  --animate-blink: blink 1s steps(2) infinite;
+  --animate-ping-soft: ping-soft 2s infinite;
+}
+
+@keyframes float {
+  to {
+    transform: translate(2.5rem, 3.75rem) scale(1.15);
+  }
+}
+/* Each of the two identical groups slides by exactly its own width, so the loop is seamless */
+@keyframes marquee {
+  to {
+    transform: translateX(-100%);
+  }
+}
+@keyframes bob {
+  to {
+    transform: translateY(-0.875rem);
+  }
+}
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+@keyframes ping-soft {
+  70% {
+    box-shadow: 0 0 0 0.625rem transparent;
+  }
+}
+@keyframes shine {
+  to {
+    background-position: 200% 0;
+  }
+}
+@keyframes word {
+  from {
+    opacity: 0;
+    filter: blur(0.6rem);
+    transform: translateY(0.6em);
+  }
+}
+
+/* ---------- Base ---------- */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 6rem;
+  }
+
+  body {
+    @apply bg-bg font-sans text-fg antialiased;
+    line-height: 1.8;
+    overflow-x: clip;
+  }
+
+  :focus-visible {
+    outline: 0.125rem solid var(--aqua);
+    outline-offset: 0.1875rem;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    ::before,
+    ::after {
+      animation: none !important;
+      transition: none !important;
+    }
+  }
+}
+
+/* ---------- Reusable pieces ---------- */
+@utility text-shimmer {
+  background-image: linear-gradient(
+    100deg,
+    var(--iris),
+    var(--aqua),
+    var(--rose),
+    var(--iris)
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shine 9s linear infinite;
+  filter: drop-shadow(0 0 1.25rem color-mix(in srgb, var(--iris) 45%, transparent));
+}
+
+@utility card {
+  @apply relative flex flex-col overflow-hidden rounded-[1.625rem] border border-line bg-card p-[1.375rem];
+  transition:
+    transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1),
+    box-shadow 0.45s;
+}
+
+@utility wrap {
+  width: min(67.5rem, calc(100% - 1.75rem));
+  margin-inline: auto;
+}
+
+@utility btn {
+  @apply inline-flex min-h-12 items-center justify-center gap-2.5 rounded-full border border-line bg-card px-6 text-[0.9375rem] leading-none font-medium whitespace-nowrap text-fg no-underline;
+  transition:
+    transform 0.25s,
+    box-shadow 0.25s;
+}
+.btn:hover {
+  transform: translateY(-0.1875rem);
+}
+.btn:active {
+  transform: scale(0.97);
+}
+.btn app-icon {
+  transition: transform 0.25s;
+}
+.btn:hover app-icon {
+  transform: translateX(-0.25rem);
+}
+
+@utility btn-main {
+  @apply border-transparent bg-fg text-bg;
+}
+.btn-main:hover {
+  box-shadow: 0 0.625rem 1.875rem -0.5rem var(--iris);
+}
+
+.card:hover {
+  transform: translateY(-0.5rem);
+  box-shadow: 0 1.5rem 3rem -1.5rem color-mix(in srgb, var(--iris) 70%, transparent);
+}
+
+/* Cursor-following glow, driven by the --mx / --my / --o vars from SpotlightDirective */
+.spot::before,
+.spot::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: var(--o, 0);
+  transition: opacity 0.25s;
+}
+.spot::before {
+  background: radial-gradient(
+    22.5rem circle at var(--mx, 50%) var(--my, 50%),
+    color-mix(in srgb, var(--iris) 26%, transparent),
+    transparent 60%
+  );
+}
+.spot::after {
+  padding: 1px;
+  border-radius: inherit;
+  background: radial-gradient(
+    18.75rem circle at var(--mx, 50%) var(--my, 50%),
+    var(--aqua),
+    transparent 65%
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box exclude,
+    linear-gradient(#000 0 0);
+}
+.spot > * {
+  position: relative;
+}
+
+/* Scroll reveal: only hidden when JS is running (html.js), so crawlers and no-JS users see everything */
+html.js .reveal {
+  opacity: 0;
+  translate: 0 3rem;
+  scale: 0.96;
+  transition:
+    opacity 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) var(--d, 0s),
+    translate 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) var(--d, 0s),
+    scale 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) var(--d, 0s),
+    transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1),
+    box-shadow 0.45s;
+}
+html.js .reveal.in {
+  opacity: 1;
+  translate: 0 0;
+  scale: 1;
+}
+html.js .reveal .bar-i {
+  scale: 1 0;
+}
+html.js .reveal.in .bar-i {
+  scale: 1 1;
+}
+
+/* Headline word entrance (+ shimmer on the highlighted words) */
+.word {
+  display: inline-block;
+  animation: word 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  animation-delay: var(--wd, 0s);
+}
+.word.text-shimmer {
+  animation:
+    word 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) both,
+    shine 9s linear infinite;
+  animation-delay: var(--wd, 0s), 0s;
+}
+
+.noise {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='.8' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Theme change: circular reveal from the switch */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+::view-transition-new(root) {
+  z-index: 9999;
+  clip-path: circle(0 at var(--vt-x, 50%) var(--vt-y, 0%));
+  animation: vt-reveal 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
+}
+@keyframes vt-reveal {
+  to {
+    clip-path: circle(150% at var(--vt-x, 50%) var(--vt-y, 0%));
+  }
 }

@@ -1,59 +1,81 @@
-# WmerFrontEnd
+# wmer — front end
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.0.3.
+Personal website of Mojtaba Erfanrad (Persian, RTL). Angular 22 with server-side rendering,
+Tailwind CSS 4, signals and zoneless change detection. The Laravel API lives in
+[wmer-back-end](https://github.com/mojerf/wmer-back-end).
 
-## Development server
+## Requirements
 
-To start a local development server, run:
+- Node.js `^22.22.3 || ^24.15.0 || >=26` (required by Angular 22)
+- npm 10+
 
-```bash
-ng serve
+## Scripts
+
+| Command | What it does |
+| --- | --- |
+| `npm start` | Dev server on http://localhost:4200 |
+| `npm run build` | Production build (SSR bundle in `dist/wmer-front-end`) |
+| `npm run serve:ssr:wmer-front-end` | Runs the built SSR server on port 4000 |
+| `npm test` | Unit tests (Vitest through `@angular/build:unit-test`) |
+| `npm run lint` | ESLint, including the architecture boundary rules |
+
+## Configuration
+
+Build-time values live in `src/environments/` (`environment.production.ts` replaces
+`environment.ts` in production builds):
+
+| Key | Meaning |
+| --- | --- |
+| `apiUrl` | Absolute URL of the Laravel API (absolute so SSR can reach it) |
+| `siteUrl` | Public origin of the site (canonical links, Open Graph, JSON-LD) |
+| `useMockApi` | Serve placeholder content instead of calling the API |
+
+Runtime environment variables of the SSR server (`src/server.ts`):
+
+| Variable | Default | Meaning |
+| --- | --- | --- |
+| `PORT` | `4000` | Listening port |
+| `ALLOWED_HOSTS` | `localhost` | Comma separated hosts the server answers for; other `Host` headers get a 400 |
+| `TRUST_PROXY` | unset | Set to `true` only behind your own reverse proxy so `X-Forwarded-*` headers are honoured |
+
+Also replace the domain in `public/robots.txt` and `public/sitemap.xml` before deploying.
+
+## Architecture
+
+```
+src/app
+├── core/        app-wide singletons: config tokens, HTTP interceptors, SEO, theme
+├── layout/      application shell: header, footer, command palette, theme switch
+├── shared/      reusable, dependency-free UI: directives, pipes, small components
+└── features/    one folder per product area, lazy-loaded from app.routes.ts
+    ├── home/        page, sections, data-access (API contract, mapper, resolver)
+    └── not-found/
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Rules (enforced by ESLint, see `eslint.config.js`):
 
-## Code scaffolding
+- `shared` imports nothing from `core`, `layout` or `features`.
+- `core` imports nothing from `layout` or `features`.
+- `layout` imports nothing from `features`.
+- A feature only uses `core` and `shared`; features never import each other or `layout`.
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+Data flow of a feature: **route resolver → `HomeApi` (abstract) → HTTP or mock implementation →
+mapper (DTO → domain model) → page input → presentational sections**. Components never touch
+`HttpClient` or Laravel's response shapes, which keeps the back end free to evolve.
 
-```bash
-ng generate component component-name
-```
+Rendering strategy is declared per route in `app.routes.server.ts` (home is rendered on request and
+cacheable; unknown URLs return a real 404). Pages set their own title, description, canonical URL and
+JSON-LD through `SeoService`.
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+Styling is Tailwind only, with sizes in `rem`. Design tokens (colors, animations) live in
+`src/styles.css`.
 
-```bash
-ng generate --help
-```
+## Security notes
 
-## Building
+- The SSR server validates the `Host` header (`ALLOWED_HOSTS`) and sends baseline security headers.
+- JSON-LD is escaped so it can never close its `<script>` tag.
+- A strict Content-Security-Policy is planned (hash-based, via `security.autoCsp`).
 
-To build the project run:
+## License
 
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Not decided yet — add a `LICENSE` file before treating the repository as open source.

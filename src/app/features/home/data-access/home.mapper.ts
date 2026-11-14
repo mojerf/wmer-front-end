@@ -1,0 +1,33 @@
+import { Collection, MainPageDto } from './home.dto';
+import { HomeContent } from './home.models';
+
+const items = <T>(collection: Collection<T> | undefined): T[] =>
+  Array.isArray(collection) ? collection : (collection?.data ?? []);
+
+export function toHomeContent(dto: MainPageDto): HomeContent {
+  return {
+    works: items(dto.works).map((w) => ({
+      id: w.id,
+      title: w.title,
+      slug: w.slug,
+      imageUrl: w.image,
+      tags: w.tags.map((t) => t.trim()).filter(Boolean),
+    })),
+    posts: items(dto.posts).map((p) => ({
+      id: p.id,
+      title: p.title,
+      slug: p.slug,
+      imageUrl: p.image,
+      publishedLabel: p.created_at,
+      commentsCount: p.comments_count,
+    })),
+    products: items(dto.products).map((p) => ({
+      id: p.id,
+      title: p.title,
+      slug: p.slug,
+      imageUrl: p.image,
+      price: p.price,
+      hasDiscount: p.has_discount,
+    })),
+  };
+}
