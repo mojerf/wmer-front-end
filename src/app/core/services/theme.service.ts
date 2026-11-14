@@ -46,10 +46,7 @@ export class ThemeService {
     if (isPlatformBrowser(this.platformId)) {
       const window = this.document.defaultView;
       if (window) {
-        const browserDark = window.matchMedia(
-          '(prefers-color-scheme: dark)'
-        ).matches;
-        return browserDark;
+        return window.matchMedia?.('(prefers-color-scheme: dark)').matches;
       }
     }
     return undefined;

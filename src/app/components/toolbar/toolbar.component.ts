@@ -1,10 +1,16 @@
-import { Component, inject, signal } from '@angular/core';
+﻿import {
+  Component,
+  inject,
+  signal,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { ThemeService } from '../../core/services/theme.service';
 
 @Component({
   selector: 'app-toolbar',
   imports: [],
   templateUrl: './toolbar.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styles: ``,
 })
 export class ToolbarComponent {
