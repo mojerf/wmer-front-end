@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { catchError, map, Observable, of, shareReplay, tap } from 'rxjs';
 import { APP_CONFIG } from '../config/app-config';
@@ -7,6 +7,7 @@ export interface User {
   firstName: string | null;
   lastName: string | null;
   email: string;
+  emailVerified: boolean;
   phoneNumber: string | null;
   role: 'admin' | 'user';
 }
@@ -15,6 +16,7 @@ interface UserDto {
   first_name: string | null;
   last_name: string | null;
   email: string;
+  email_verified?: boolean;
   phone_number: string | null;
   role: 'admin' | 'user';
 }
@@ -32,6 +34,7 @@ const toUser = (dto: UserDto): User => ({
   firstName: dto.first_name,
   lastName: dto.last_name,
   email: dto.email,
+  emailVerified: dto.email_verified ?? false,
   phoneNumber: dto.phone_number,
   role: dto.role,
 });
@@ -68,6 +71,30 @@ export class AuthService {
       shareReplay(1),
     );
     return this.restore$;
+  }
+
+  /** Re-reads the signed-in user from the API (e.g. after confirming the e-mail address). */
+  refresh(): Observable<User | null> {
+    this.restore$ = undefined;
+    return this.restore();
+  }
+
+  /** Confirms an e-mail address from the link's parameters (works without being signed in). */
+  verifyEmail(link: { id: string; hash: string; expires: string; signature: string }): Observable<string> {
+    const query = new HttpParams().set('expires', link.expires).set('signature', link.signature);
+    return this.http
+      .post<{ message: string }>(
+        `${this.api}/email/verify/${encodeURIComponent(link.id)}/${encodeURIComponent(link.hash)}`,
+        {},
+        { params: query },
+      )
+      .pipe(map((res) => res.message));
+  }
+
+  resendVerification(): Observable<string> {
+    return this.http
+      .post<{ message: string }>(`${this.api}/email/verification-notification`, {})
+      .pipe(map((res) => res.message));
   }
 
   login(email: string, password: string): Observable<User> {

@@ -101,4 +101,32 @@ describe('AuthService', () => {
 
     expect(auth.isLoggedIn()).toBe(false);
   });
+  it('maps e-mail verification and refreshes the user after confirming', async () => {
+    const first = firstValueFrom(auth.restore());
+    controller.expectOne(`${api}/me`).flush({ data: { ...userDto, email_verified: false } });
+    await first;
+    expect(auth.user()?.emailVerified).toBe(false);
+
+    const again = firstValueFrom(auth.refresh());
+    controller.expectOne(`${api}/me`).flush({ data: { ...userDto, email_verified: true } });
+    await again;
+    expect(auth.user()?.emailVerified).toBe(true);
+  });
+
+  it('posts the signed link parameters to confirm an e-mail address', async () => {
+    const done = firstValueFrom(auth.verifyEmail({ id: '7', hash: 'abc', expires: '99', signature: 'sig' }));
+    const req = controller.expectOne((r) => r.url === `${api}/email/verify/7/abc`);
+    expect(req.request.method).toBe('POST');
+    expect(req.request.params.get('expires')).toBe('99');
+    expect(req.request.params.get('signature')).toBe('sig');
+    req.flush({ message: 'تأیید شد' });
+
+    expect(await done).toBe('تأیید شد');
+  });
+
+  it('asks for a new verification link', async () => {
+    const done = firstValueFrom(auth.resendVerification());
+    controller.expectOne(`${api}/email/verification-notification`).flush({ message: 'ارسال شد' });
+    expect(await done).toBe('ارسال شد');
+  });
 });

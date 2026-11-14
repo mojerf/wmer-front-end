@@ -20,6 +20,11 @@ export const AUTH_ROUTES: Routes = [
       import('./forgot-password-page.component').then((m) => m.ForgotPasswordPageComponent),
   },
   {
+    path: 'verify-email',
+    loadComponent: () =>
+      import('./verify-email-page.component').then((m) => m.VerifyEmailPageComponent),
+  },
+  {
     path: 'reset-password',
     loadComponent: () =>
       import('./reset-password-page.component').then((m) => m.ResetPasswordPageComponent),

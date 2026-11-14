@@ -3,10 +3,17 @@ import { RouterOutlet } from '@angular/router';
 import { CommandPaletteComponent } from './layout/command-palette/command-palette.component';
 import { SiteFooterComponent } from './layout/site-footer/site-footer.component';
 import { SiteHeaderComponent } from './layout/site-header/site-header.component';
+import { VerifyEmailBannerComponent } from './layout/verify-email-banner/verify-email-banner.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, SiteHeaderComponent, SiteFooterComponent, CommandPaletteComponent],
+  imports: [
+    RouterOutlet,
+    SiteHeaderComponent,
+    SiteFooterComponent,
+    CommandPaletteComponent,
+    VerifyEmailBannerComponent,
+  ],
   templateUrl: './app.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

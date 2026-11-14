@@ -68,6 +68,7 @@ export const serverRoutes: ServerRoute[] = [
   { path: 'register', renderMode: RenderMode.Client },
   { path: 'forgot-password', renderMode: RenderMode.Client },
   { path: 'reset-password', renderMode: RenderMode.Client },
+  { path: 'verify-email', renderMode: RenderMode.Client },
   { path: '404', renderMode: RenderMode.Server, status: 404 },
   { path: '**', renderMode: RenderMode.Server, status: 404 },
 ];
