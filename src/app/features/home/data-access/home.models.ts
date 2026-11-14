@@ -12,8 +12,8 @@ export interface Post {
   title: string;
   slug: string;
   imageUrl: string | null;
-  /** Human-readable publish time as provided by the API, e.g. "۳ روز پیش". */
-  publishedLabel: string;
+  /** ISO 8601 publish time. */
+  publishedAt: string;
   commentsCount: number;
 }
 
@@ -22,9 +22,10 @@ export interface Product {
   title: string;
   slug: string;
   imageUrl: string | null;
-  /** Final price in tomans (already discounted when `hasDiscount` is true). */
+  /** Final price in tomans (already discounted when `oldPrice` is set). */
   price: number;
-  hasDiscount: boolean;
+  /** Original price, only for discounted products. */
+  oldPrice: number | null;
 }
 
 export interface HomeContent {

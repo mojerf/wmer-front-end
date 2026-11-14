@@ -5,7 +5,6 @@ import {
   ElementRef,
   inject,
   input,
-  numberAttribute,
   signal,
 } from '@angular/core';
 
@@ -20,7 +19,13 @@ import {
 })
 export class RevealDirective {
   /** Extra delay in milliseconds, for staggering siblings. */
-  readonly delay = input(0, { transform: numberAttribute, alias: 'appReveal' });
+  readonly delay = input(0, {
+    alias: 'appReveal',
+    transform: (value: unknown): number => {
+      const ms = Number(value);
+      return value === '' || !Number.isFinite(ms) ? 0 : ms;
+    },
+  });
 
   protected readonly shown = signal(false);
 

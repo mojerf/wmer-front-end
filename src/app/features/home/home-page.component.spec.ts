@@ -13,10 +13,10 @@ const content: HomeContent = {
     { id: 2, title: 'کار دو', slug: 'two', imageUrl: null, tags: [] },
   ],
   posts: [
-    { id: 1, title: 'پست یک', slug: 'p1', imageUrl: null, publishedLabel: 'دیروز', commentsCount: 0 },
+    { id: 1, title: 'پست یک', slug: 'p1', imageUrl: null, publishedAt: '2026-01-01T00:00:00Z', commentsCount: 0 },
   ],
   products: [
-    { id: 1, title: 'محصول یک', slug: 'x', imageUrl: null, price: 1000, hasDiscount: true },
+    { id: 1, title: 'محصول یک', slug: 'x', imageUrl: null, price: 1000, oldPrice: 2000 },
   ],
 };
 

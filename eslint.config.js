@@ -13,7 +13,7 @@ const FEATURES = ["home", "not-found"];
 const forbid = (files, groups, message) => ({
   files,
   rules: {
-    "no-restricted-imports": ["error", { patterns: groups.map((group) => ({ group: [group], message })) }],
+    "no-restricted-imports": ["error", { patterns: groups.map((group) => ({ group: [group, "!@angular/**"], message })) }],
   },
 });
 

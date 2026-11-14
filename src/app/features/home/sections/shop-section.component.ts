@@ -32,7 +32,8 @@ import { decorAt } from '../home.content';
             <div>
               <b class="text-[1.25rem]">{{ product.price | faNumber }}</b>
               <span class="ms-1 text-[0.75rem] text-mut">تومان</span>
-              @if (product.hasDiscount) {
+              @if (product.oldPrice) {
+                <s class="ms-2 text-[0.8125rem] text-mut">{{ product.oldPrice | faNumber }}</s>
                 <span class="ms-2 rounded-full bg-rose/15 px-2 py-0.5 text-[0.6875rem] text-rose">تخفیف</span>
               }
             </div>

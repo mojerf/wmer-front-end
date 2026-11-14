@@ -18,7 +18,7 @@ export function toHomeContent(dto: MainPageDto): HomeContent {
       title: p.title,
       slug: p.slug,
       imageUrl: p.image,
-      publishedLabel: p.created_at,
+      publishedAt: p.created_at,
       commentsCount: p.comments_count,
     })),
     products: items(dto.products).map((p) => ({
@@ -27,7 +27,7 @@ export function toHomeContent(dto: MainPageDto): HomeContent {
       slug: p.slug,
       imageUrl: p.image,
       price: p.price,
-      hasDiscount: p.has_discount,
+      oldPrice: p.has_discount ? p.old_price : null,
     })),
   };
 }

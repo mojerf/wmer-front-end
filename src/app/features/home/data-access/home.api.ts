@@ -23,6 +23,8 @@ export class HttpHomeApi extends HomeApi {
   }
 }
 
+const daysAgo = (days: number): string => new Date(Date.now() - days * 86_400_000).toISOString();
+
 /** Placeholder content used while `useMockApi` is on. Shaped exactly like the mapped API data. */
 @Injectable()
 export class MockHomeApi extends HomeApi {
@@ -34,13 +36,13 @@ export class MockHomeApi extends HomeApi {
         { id: 3, title: 'فروشگاه محصولات دیجیتال', slug: 'digital-shop', imageUrl: null, tags: ['Laravel', 'MySQL'] },
       ],
       posts: [
-        { id: 1, title: 'چرا Angular را zoneless کردم', slug: 'zoneless-angular', imageUrl: null, publishedLabel: '۳ روز پیش', commentsCount: 0 },
-        { id: 2, title: 'SSR و سئو؛ راهنمای عملی', slug: 'ssr-seo', imageUrl: null, publishedLabel: '۱ هفته پیش', commentsCount: 0 },
-        { id: 3, title: 'ساخت API امن با لاراول و Sanctum', slug: 'secure-laravel-api', imageUrl: null, publishedLabel: '۲ هفته پیش', commentsCount: 0 },
+        { id: 1, title: 'چرا Angular را zoneless کردم', slug: 'zoneless-angular', imageUrl: null, publishedAt: daysAgo(3), commentsCount: 0 },
+        { id: 2, title: 'SSR و سئو؛ راهنمای عملی', slug: 'ssr-seo', imageUrl: null, publishedAt: daysAgo(8), commentsCount: 0 },
+        { id: 3, title: 'ساخت API امن با لاراول و Sanctum', slug: 'secure-laravel-api', imageUrl: null, publishedAt: daysAgo(15), commentsCount: 0 },
       ],
       products: [
-        { id: 1, title: 'قالب داشبورد Angular', slug: 'angular-dashboard-template', imageUrl: null, price: 490_000, hasDiscount: true },
-        { id: 2, title: 'دوره‌ی لاراول از صفر', slug: 'laravel-course', imageUrl: null, price: 1_200_000, hasDiscount: false },
+        { id: 1, title: 'قالب داشبورد Angular', slug: 'angular-dashboard-template', imageUrl: null, price: 490_000, oldPrice: 650_000 },
+        { id: 2, title: 'دوره‌ی لاراول از صفر', slug: 'laravel-course', imageUrl: null, price: 1_200_000, oldPrice: null },
       ],
     });
   }

@@ -160,7 +160,10 @@
 }
 
 @utility card {
-  @apply relative flex flex-col overflow-hidden rounded-[1.625rem] border border-line bg-card p-[1.375rem];
+  @apply relative flex flex-col overflow-hidden rounded-[1.625rem] bg-card p-[1.375rem];
+  /* The 1px outline is an inset shadow (not a border) so the pointer glow ring, which also lives inside
+     the box edge, overlaps it exactly instead of floating 1px inside a real border. */
+  box-shadow: inset 0 0 0 1px var(--line);
   transition:
     transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1),
     box-shadow 0.45s;
@@ -199,7 +202,9 @@
 
 .card:hover {
   transform: translateY(-0.5rem);
-  box-shadow: 0 1.5rem 3rem -1.5rem color-mix(in srgb, var(--iris) 70%, transparent);
+  box-shadow:
+    inset 0 0 0 1px var(--line),
+    0 1.5rem 3rem -1.5rem color-mix(in srgb, var(--iris) 70%, transparent);
 }
 
 /* Cursor-following glow, driven by the --mx / --my / --o vars from SpotlightDirective */
