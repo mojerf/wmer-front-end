@@ -6,6 +6,8 @@ import {
 } from '@angular/ssr/node';
 import express from 'express';
 import { join } from 'node:path';
+import { SITE } from './app/core/config/site.config';
+import { buildRobots, buildRss, buildSitemap, cached, fetchAllItems } from './seo-feeds';
 
 const browserDistFolder = join(import.meta.dirname, '../browser');
 
@@ -32,6 +34,47 @@ app.use((_req, res, next) => {
   res.setHeader('Permissions-Policy', 'camera=(), microphone=(), geolocation=(), payment=()');
   res.setHeader('Strict-Transport-Security', 'max-age=63072000; includeSubDomains');
   next();
+});
+
+/**
+ * Crawler documents, generated from the API (never from stale static files).
+ * SITE_URL is this site's public origin; API_URL is the Laravel API as seen from this server.
+ */
+const siteUrl = process.env['SITE_URL'] ?? 'http://localhost:4000';
+const apiUrl = process.env['API_URL'] ?? 'http://localhost:8000/api/v1';
+const FEED_TTL_MS = 10 * 60 * 1000;
+
+const loadContent = cached(async () => {
+  const [works, posts, products] = await Promise.all([
+    fetchAllItems(apiUrl, 'works'),
+    fetchAllItems(apiUrl, 'posts'),
+    fetchAllItems(apiUrl, 'products'),
+  ]);
+  return { works, posts, products };
+}, FEED_TTL_MS);
+
+const sendXml = (res: express.Response, type: string, body: string): void => {
+  res.type(type).setHeader('Cache-Control', 'public, max-age=0, s-maxage=600, stale-while-revalidate=3600');
+  res.send(body);
+};
+
+app.get('/robots.txt', (_req, res) => {
+  res.type('text/plain').setHeader('Cache-Control', 'public, max-age=3600');
+  res.send(buildRobots(siteUrl));
+});
+
+app.get('/sitemap.xml', (_req, res, next) => {
+  loadContent()
+    .then((content) => sendXml(res, 'application/xml', buildSitemap(siteUrl, content)))
+    .catch(next);
+});
+
+app.get('/rss.xml', (_req, res, next) => {
+  loadContent()
+    .then(({ posts }) =>
+      sendXml(res, 'application/rss+xml', buildRss(siteUrl, { name: SITE.name, description: SITE.description }, posts.slice(0, 30))),
+    )
+    .catch(next);
 });
 
 /** Serve static files from /browser */
