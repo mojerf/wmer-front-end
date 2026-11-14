@@ -14,5 +14,20 @@ export const serverRoutes: ServerRoute[] = [
       'Cache-Control': 'public, max-age=0, s-maxage=300, stale-while-revalidate=600',
     },
   },
+  {
+    path: 'blog',
+    renderMode: RenderMode.Server,
+    headers: {
+      'Cache-Control': 'public, max-age=0, s-maxage=300, stale-while-revalidate=600',
+    },
+  },
+  {
+    path: 'blog/:slug',
+    renderMode: RenderMode.Server,
+    headers: {
+      'Cache-Control': 'public, max-age=0, s-maxage=300, stale-while-revalidate=600',
+    },
+  },
+  { path: '404', renderMode: RenderMode.Server, status: 404 },
   { path: '**', renderMode: RenderMode.Server, status: 404 },
 ];

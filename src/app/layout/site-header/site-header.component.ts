@@ -23,10 +23,10 @@ import { ThemeSwitchComponent } from '../theme-switch/theme-switch.component';
       </a>
 
       <nav aria-label="منوی اصلی" class="hidden gap-1 text-[0.875rem] text-mut min-[820px]:flex">
-        @for (link of links; track link.id) {
+        @for (link of links; track link.label) {
           <a
-            routerLink="/"
-            [fragment]="link.id"
+            [routerLink]="link.route"
+            [fragment]="link.fragment"
             class="rounded-full px-3 py-1 transition-colors hover:bg-line hover:text-fg"
           >
             {{ link.label }}
@@ -53,9 +53,9 @@ export class SiteHeaderComponent {
   protected readonly palette = inject(PaletteService);
 
   protected readonly links = [
-    { id: 'works', label: 'نمونه‌کارها' },
-    { id: 'blog', label: 'وبلاگ' },
-    { id: 'shop', label: 'فروشگاه' },
-    { id: 'contact', label: 'تماس' },
+    { route: '/', fragment: 'works', label: 'نمونه‌کارها' },
+    { route: '/blog', fragment: undefined, label: 'وبلاگ' },
+    { route: '/', fragment: 'shop', label: 'فروشگاه' },
+    { route: '/', fragment: 'contact', label: 'تماس' },
   ] as const;
 }

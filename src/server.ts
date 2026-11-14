@@ -40,9 +40,10 @@ app.use(
     maxAge: '1y',
     index: false,
     redirect: false,
-    // Files that are not content-hashed must always be revalidated, or updates never reach users.
+    // Files that are not content-hashed (including the un-hashed development bundles) must always be
+    // revalidated, or updates never reach users.
     setHeaders: (res, path) => {
-      if (/(ngsw-worker\.js|ngsw\.json|safety-worker\.js|worker-basic\.min\.js|manifest\.webmanifest|theme-init\.js|robots\.txt|sitemap\.xml)$/.test(path)) {
+      if (/(ngsw-worker\.js|ngsw\.json|safety-worker\.js|worker-basic\.min\.js|manifest\.webmanifest|theme-init\.js|robots\.txt|sitemap\.xml|[\\/](main|polyfills|styles)\.(js|css))$/.test(path)) {
         res.setHeader('Cache-Control', 'no-cache');
       }
     },

@@ -7,6 +7,18 @@ export const routes: Routes = [
     loadChildren: () => import('./features/home/home.routes').then((m) => m.HOME_ROUTES),
   },
   {
+    path: 'blog',
+    loadChildren: () => import('./features/blog/blog.routes').then((m) => m.BLOG_ROUTES),
+  },
+  // Explicit target for failed lookups (API 404); also answered with HTTP 404 by the server.
+  {
+    path: '404',
+    loadComponent: () =>
+      import('./features/not-found/not-found-page.component').then(
+        (m) => m.NotFoundPageComponent,
+      ),
+  },
+  {
     path: '**',
     loadComponent: () =>
       import('./features/not-found/not-found-page.component').then(

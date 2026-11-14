@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, RESPONSE_INIT } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { SeoService } from '../../core/seo/seo.service';
 import { IconComponent } from '../../shared/ui/icon/icon.component';
@@ -18,6 +18,12 @@ import { IconComponent } from '../../shared/ui/icon/icon.component';
 })
 export class NotFoundPageComponent {
   constructor() {
+    // On the server this makes the HTTP response a real 404, also when reached through a redirect.
+    const response = inject(RESPONSE_INIT, { optional: true });
+    if (response) {
+      response.status = 404;
+    }
+
     inject(SeoService).set({
       title: 'صفحه پیدا نشد | مجتبی عرفان‌راد',
       description: 'صفحه‌ی مورد نظر پیدا نشد.',
