@@ -240,7 +240,9 @@
     linear-gradient(#000 0 0) content-box exclude,
     linear-gradient(#000 0 0);
 }
-.spot > * {
+/* Content sits above the glow layers, except children that position themselves (e.g. a stretched
+   `absolute inset-0` link): this unlayered rule would otherwise beat Tailwind's `absolute` utility. */
+.spot > :not(.absolute) {
   position: relative;
 }
 
