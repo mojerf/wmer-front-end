@@ -4,6 +4,7 @@ export interface WorkSummaryDto {
   title: string;
   slug: string;
   image: string | null;
+  image_thumb?: string | null;
   tags: string[];
   created_at: string;
 }

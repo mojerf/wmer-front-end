@@ -4,6 +4,7 @@ import {
   isMainModule,
   writeResponseToNodeResponse,
 } from '@angular/ssr/node';
+import compression from 'compression';
 import express from 'express';
 import { join } from 'node:path';
 import { SITE } from './app/core/config/site.config';
@@ -24,6 +25,9 @@ const angularApp = new AngularNodeAppEngine({
   trustProxyHeaders:
     process.env['TRUST_PROXY'] === 'true' ? ['x-forwarded-host', 'x-forwarded-proto'] : false,
 });
+
+/** gzip/deflate for text responses (HTML, JS, CSS, JSON, XML). Images are already compressed and skipped. */
+app.use(compression());
 
 /** Baseline security headers (a strict CSP is added in a later step). */
 app.use((_req, res, next) => {

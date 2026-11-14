@@ -12,6 +12,8 @@ export interface ProductSummary {
   title: string;
   slug: string;
   imageUrl: string | null;
+  /** Small WebP for cards; falls back to `imageUrl`. */
+  thumbUrl?: string | null;
   /** What the customer pays, in tomans. */
   price: number;
   /** Original price, only for discounted products. */

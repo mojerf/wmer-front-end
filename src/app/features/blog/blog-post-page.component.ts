@@ -55,6 +55,7 @@ const countAll = (comments: readonly PostComment[]): number =>
         <img
           [src]="post.imageUrl"
           [alt]="post.title"
+          fetchpriority="high"
           class="mt-6 max-h-[28rem] w-full rounded-[1.5rem] object-cover"
         />
       }

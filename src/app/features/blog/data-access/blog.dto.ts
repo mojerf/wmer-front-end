@@ -4,6 +4,7 @@ export interface PostSummaryDto {
   title: string;
   slug: string;
   image: string | null;
+  image_thumb?: string | null;
   created_at: string;
   comments_count: number;
 }

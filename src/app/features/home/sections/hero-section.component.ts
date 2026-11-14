@@ -17,9 +17,9 @@ interface Word {
       aria-hidden="true"
       class="pointer-events-none absolute inset-0 -z-10 overflow-hidden [mask-image:linear-gradient(#000_60%,transparent)]"
     >
-      <div class="absolute -top-24 -right-16 size-[32.5rem] animate-float rounded-full bg-iris opacity-(--glow) blur-[5.625rem]"></div>
-      <div class="absolute top-12 -left-24 size-[26.25rem] animate-float rounded-full bg-aqua opacity-(--glow) blur-[5.625rem] [animation-delay:-5s]"></div>
-      <div class="absolute -bottom-12 right-[32%] size-[20rem] animate-float rounded-full bg-rose opacity-(--glow) blur-[5.625rem] [animation-delay:-9s]"></div>
+      <div class="absolute -top-40 -right-40 size-[45rem] animate-float rounded-full bg-[radial-gradient(closest-side,var(--color-iris),transparent)] opacity-(--glow) will-change-transform"></div>
+      <div class="absolute top-0 -left-40 size-[36rem] animate-float rounded-full bg-[radial-gradient(closest-side,var(--color-aqua),transparent)] opacity-(--glow) will-change-transform [animation-delay:-5s]"></div>
+      <div class="absolute -bottom-24 right-[28%] size-[28rem] animate-float rounded-full bg-[radial-gradient(closest-side,var(--color-rose),transparent)] opacity-(--glow) will-change-transform [animation-delay:-9s]"></div>
     </div>
 
     <div

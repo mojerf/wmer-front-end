@@ -6,6 +6,7 @@ export const toPostSummary = (dto: PostSummaryDto): PostSummary => ({
   title: dto.title,
   slug: dto.slug,
   imageUrl: dto.image,
+  thumbUrl: dto.image_thumb ?? dto.image,
   publishedAt: dto.created_at,
   commentsCount: dto.comments_count,
 });

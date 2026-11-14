@@ -3,6 +3,8 @@ export interface PostSummary {
   title: string;
   slug: string;
   imageUrl: string | null;
+  /** Small WebP for cards; falls back to `imageUrl`. */
+  thumbUrl?: string | null;
   /** ISO 8601 */
   publishedAt: string;
   commentsCount: number;

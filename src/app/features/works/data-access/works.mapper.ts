@@ -9,6 +9,7 @@ export const toWorkSummary = (dto: WorkSummaryDto): WorkSummary => ({
   title: dto.title,
   slug: dto.slug,
   imageUrl: dto.image,
+  thumbUrl: dto.image_thumb ?? dto.image,
   tags: dto.tags.map((t) => t.trim()).filter(Boolean),
   publishedAt: dto.created_at,
 });

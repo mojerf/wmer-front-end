@@ -8,6 +8,37 @@ import {
   signal,
 } from '@angular/core';
 
+/**
+ * One IntersectionObserver serves every revealed element on the page (a list page has dozens),
+ * instead of one observer per element.
+ */
+const callbacks = new WeakMap<Element, () => void>();
+let sharedObserver: IntersectionObserver | undefined;
+
+function watch(el: Element, onVisible: () => void): () => void {
+  sharedObserver ??= new IntersectionObserver(
+    (entries) => {
+      for (const entry of entries) {
+        if (entry.isIntersecting) {
+          const callback = callbacks.get(entry.target);
+          sharedObserver?.unobserve(entry.target);
+          callbacks.delete(entry.target);
+          callback?.();
+        }
+      }
+    },
+    { threshold: 0.12 },
+  );
+
+  callbacks.set(el, onVisible);
+  sharedObserver.observe(el);
+
+  return () => {
+    callbacks.delete(el);
+    sharedObserver?.unobserve(el);
+  };
+}
+
 /** Fades and slides an element in when it scrolls into view. Hidden state only exists with JS (see styles.css). */
 @Directive({
   selector: '[appReveal]',
@@ -38,17 +69,7 @@ export class RevealDirective {
         this.shown.set(true);
         return;
       }
-      const observer = new IntersectionObserver(
-        (entries) => {
-          if (entries.some((e) => e.isIntersecting)) {
-            this.shown.set(true);
-            observer.disconnect();
-          }
-        },
-        { threshold: 0.12 },
-      );
-      observer.observe(el);
-      destroyRef.onDestroy(() => observer.disconnect());
+      destroyRef.onDestroy(watch(el, () => this.shown.set(true)));
     });
   }
 }

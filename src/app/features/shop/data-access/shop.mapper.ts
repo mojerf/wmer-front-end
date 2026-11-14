@@ -6,6 +6,7 @@ export const toProductSummary = (dto: ProductSummaryDto): ProductSummary => ({
   title: dto.title,
   slug: dto.slug,
   imageUrl: dto.image,
+  thumbUrl: dto.image_thumb ?? dto.image,
   price: dto.price,
   oldPrice: dto.has_discount ? dto.old_price : null,
   publishedAt: dto.created_at,

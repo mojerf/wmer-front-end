@@ -3,6 +3,8 @@ export interface WorkSummary {
   title: string;
   slug: string;
   imageUrl: string | null;
+  /** Small WebP for cards; falls back to `imageUrl`. */
+  thumbUrl?: string | null;
   tags: readonly string[];
   publishedAt: string;
 }

@@ -28,6 +28,7 @@ describe('works mappers', () => {
       title: 'پروژه',
       slug: 'project',
       imageUrl: null,
+      thumbUrl: null,
       tags: ['Angular', 'Laravel'],
       publishedAt: '2026-01-01T00:00:00+00:00',
     });

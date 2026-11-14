@@ -4,6 +4,7 @@ export interface Work {
   title: string;
   slug: string;
   imageUrl: string | null;
+  thumbUrl?: string | null;
   tags: readonly string[];
 }
 
@@ -12,6 +13,7 @@ export interface Post {
   title: string;
   slug: string;
   imageUrl: string | null;
+  thumbUrl?: string | null;
   /** ISO 8601 publish time. */
   publishedAt: string;
   commentsCount: number;
@@ -22,6 +24,7 @@ export interface Product {
   title: string;
   slug: string;
   imageUrl: string | null;
+  thumbUrl?: string | null;
   /** Final price in tomans (already discounted when `oldPrice` is set). */
   price: number;
   /** Original price, only for discounted products. */

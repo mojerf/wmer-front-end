@@ -4,6 +4,7 @@ export interface WorkDto {
   title: string;
   slug: string;
   image: string | null;
+  image_thumb?: string | null;
   tags: string[];
   created_at: string;
 }
@@ -13,6 +14,7 @@ export interface PostDto {
   title: string;
   slug: string;
   image: string | null;
+  image_thumb?: string | null;
   /** ISO 8601 */
   created_at: string;
   comments_count: number;
@@ -23,6 +25,7 @@ export interface ProductDto {
   title: string;
   slug: string;
   image: string | null;
+  image_thumb?: string | null;
   /** What the customer pays (already discounted). */
   price: number;
   /** Original price, only for discounted products. */

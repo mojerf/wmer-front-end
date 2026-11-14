@@ -34,7 +34,7 @@ describe('toHomeContent', () => {
 
     expect(toHomeContent(dto)).toEqual({
       works: [
-        { id: 1, title: 'W', slug: 'w', imageUrl: 'http://x/w.png', tags: ['Angular', 'Laravel'] },
+        { id: 1, title: 'W', slug: 'w', imageUrl: 'http://x/w.png', thumbUrl: 'http://x/w.png', tags: ['Angular', 'Laravel'] },
       ],
       posts: [
         {
@@ -42,11 +42,12 @@ describe('toHomeContent', () => {
           title: 'P',
           slug: 'p',
           imageUrl: null,
+          thumbUrl: null,
           publishedAt: '2026-02-01T00:00:00+00:00',
           commentsCount: 3,
         },
       ],
-      products: [{ id: 3, title: 'S', slug: 's', imageUrl: null, price: 500, oldPrice: 900 }],
+      products: [{ id: 3, title: 'S', slug: 's', imageUrl: null, thumbUrl: null, price: 500, oldPrice: 900 }],
     });
   });
 

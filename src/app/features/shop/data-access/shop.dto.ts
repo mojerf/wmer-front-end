@@ -4,6 +4,7 @@ export interface ProductSummaryDto {
   title: string;
   slug: string;
   image: string | null;
+  image_thumb?: string | null;
   price: number;
   old_price: number | null;
   has_discount: boolean;

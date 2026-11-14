@@ -55,7 +55,7 @@ import { BlogListData } from './data-access/blog.resolvers';
                 [class]="post.imageUrl ? 'bg-bg-2' : fallbackGradient"
               >
                 @if (post.imageUrl) {
-                  <img [src]="post.imageUrl" [alt]="post.title" loading="lazy" class="size-full object-cover" />
+                  <img [src]="post.thumbUrl ?? post.imageUrl" [alt]="post.title" loading="lazy" decoding="async" class="size-full object-cover" />
                 } @else {
                   <span aria-hidden="true">✦</span>
                 }

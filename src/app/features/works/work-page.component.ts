@@ -43,7 +43,7 @@ const excerpt = (text: string, max = 160): string => {
       </ul>
 
       @if (w.fullImageUrl || w.imageUrl; as src) {
-        <img [src]="src" [alt]="w.title" class="mt-6 max-h-[32rem] w-full rounded-[1.5rem] object-cover" />
+        <img [src]="src" [alt]="w.title" fetchpriority="high" class="mt-6 max-h-[32rem] w-full rounded-[1.5rem] object-cover" />
       }
 
       <dl class="mt-8 grid gap-3 rounded-[1.5rem] border border-line bg-card p-5 text-[0.9375rem] sm:grid-cols-3">

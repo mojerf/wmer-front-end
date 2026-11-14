@@ -32,7 +32,7 @@ const excerpt = (text: string, max = 160): string => {
           [class]="p.imageUrl ? 'bg-bg-2' : fallbackGradient"
         >
           @if (p.imageUrl) {
-            <img [src]="p.imageUrl" [alt]="p.title" class="size-full object-cover" />
+            <img [src]="p.imageUrl" [alt]="p.title" fetchpriority="high" class="size-full object-cover" />
           } @else {
             <span aria-hidden="true">▤</span>
           }

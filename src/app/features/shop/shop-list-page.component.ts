@@ -64,7 +64,7 @@ import { ShopListData } from './data-access/shop.resolvers';
                 [class]="product.imageUrl ? 'bg-bg-2' : fallbackGradient"
               >
                 @if (product.imageUrl) {
-                  <img [src]="product.imageUrl" [alt]="product.title" loading="lazy" class="size-full object-cover" />
+                  <img [src]="product.thumbUrl ?? product.imageUrl" [alt]="product.title" loading="lazy" decoding="async" class="size-full object-cover" />
                 } @else {
                   <span aria-hidden="true">▤</span>
                 }

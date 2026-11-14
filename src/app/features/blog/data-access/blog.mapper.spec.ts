@@ -17,6 +17,7 @@ describe('blog mappers', () => {
       title: 'T',
       slug: 't',
       imageUrl: null,
+      thumbUrl: null,
       publishedAt: '2026-01-01T00:00:00+00:00',
       commentsCount: 4,
     });
@@ -38,6 +39,8 @@ describe('blog mappers', () => {
     expect(post.author).toBe('مجتبی');
     expect(post.updatedAt).toBe('2026-01-02T00:00:00+00:00');
     expect(post.imageUrl).toBe('http://x/i.png');
+    expect(toPostSummary({ ...dto, image: 'http://x/i.png', image_thumb: 'http://x/t.webp' }).thumbUrl).toBe('http://x/t.webp');
+    expect(toPostSummary({ ...dto, image: 'http://x/i.png' }).thumbUrl).toBe('http://x/i.png');
   });
 
   it('maps nested replies and tolerates a missing replies key', () => {

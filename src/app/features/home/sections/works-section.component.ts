@@ -86,7 +86,7 @@ import { decorAt, LIGHTHOUSE_BARS } from '../home.content';
         [class]="work.imageUrl ? 'bg-bg-2' : decor(index).gradient"
       >
         @if (work.imageUrl) {
-          <img [src]="work.imageUrl" [alt]="work.title" loading="lazy" class="size-full object-cover" />
+          <img [src]="work.thumbUrl ?? work.imageUrl" [alt]="work.title" loading="lazy" decoding="async" class="size-full object-cover" />
         } @else {
           <span aria-hidden="true">{{ decor(index).glyph }}</span>
         }

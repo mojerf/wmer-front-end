@@ -54,7 +54,7 @@ import { WorksListData } from './data-access/works.resolvers';
                 [class]="work.imageUrl ? 'bg-bg-2' : fallbackGradient"
               >
                 @if (work.imageUrl) {
-                  <img [src]="work.imageUrl" [alt]="work.title" loading="lazy" class="size-full object-cover" />
+                  <img [src]="work.thumbUrl ?? work.imageUrl" [alt]="work.title" loading="lazy" decoding="async" class="size-full object-cover" />
                 } @else {
                   <span aria-hidden="true">⌘</span>
                 }
