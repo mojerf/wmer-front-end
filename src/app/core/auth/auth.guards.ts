@@ -22,3 +22,18 @@ export const requireAuth: CanActivateFn = (_route, state) => {
       ),
     );
 };
+
+/** The admin area: signed-in administrators only (the API enforces it too; this just spares everyone else a dead page). */
+export const requireAdmin: CanActivateFn = (_route, state) => {
+  const router = inject(Router);
+  return inject(AuthService)
+    .restore()
+    .pipe(
+      map((user) => {
+        if (!user) {
+          return router.createUrlTree(['/login'], { queryParams: { redirect: state.url } });
+        }
+        return user.role === 'admin' ? true : router.parseUrl('/');
+      }),
+    );
+};

@@ -63,6 +63,9 @@ export const serverRoutes: ServerRoute[] = [
   { path: 'cart', renderMode: RenderMode.Client },
   { path: 'orders', renderMode: RenderMode.Client },
   { path: 'orders/:id', renderMode: RenderMode.Client },
+  // The admin area is private, per-visitor and never indexed.
+  { path: 'admin/**', renderMode: RenderMode.Client },
+  { path: 'admin', renderMode: RenderMode.Client },
   // Account pages are per-visitor and need cookies the server does not have: render them in the browser.
   { path: 'login', renderMode: RenderMode.Client },
   { path: 'register', renderMode: RenderMode.Client },

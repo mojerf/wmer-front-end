@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { ActivatedRouteSnapshot, provideRouter, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { firstValueFrom, isObservable, of } from 'rxjs';
 import { describe, expect, it } from 'vitest';
-import { guestOnly, requireAuth } from './auth.guards';
+import { guestOnly, requireAdmin, requireAuth } from './auth.guards';
 import { AuthService } from './auth.service';
 
 const run = async (user: unknown) => {
@@ -46,5 +46,29 @@ describe('requireAuth', () => {
     const result = await runAuth(null);
     expect(result).toBeInstanceOf(UrlTree);
     expect(String(result)).toBe('/login?redirect=%2Forders%3Fpage%3D2');
+  });
+});
+
+describe('requireAdmin', () => {
+  const runAdmin = async (user: unknown) => {
+    TestBed.configureTestingModule({
+      providers: [provideRouter([]), { provide: AuthService, useValue: { restore: () => of(user) } }],
+    });
+    const result = TestBed.runInInjectionContext(() =>
+      requireAdmin({} as ActivatedRouteSnapshot, { url: '/admin' } as RouterStateSnapshot),
+    );
+    return isObservable(result) ? firstValueFrom(result) : result;
+  };
+
+  it('lets administrators in', async () => {
+    expect(await runAdmin({ role: 'admin' })).toBe(true);
+  });
+
+  it('sends ordinary users home', async () => {
+    expect(String(await runAdmin({ role: 'user' }))).toBe('/');
+  });
+
+  it('sends guests to sign in and back', async () => {
+    expect(String(await runAdmin(null))).toBe('/login?redirect=%2Fadmin');
   });
 });

@@ -71,6 +71,9 @@ import { ThemeSwitchComponent } from '../theme-switch/theme-switch.component';
             >
             <span class="max-w-[7rem] truncate max-[820px]:hidden">{{ auth.displayName() }}</span>
             <a routerLink="/orders" class="text-mut hover:text-fg max-[820px]:hidden">سفارش‌ها</a>
+            @if (auth.user()?.role === 'admin') {
+              <a routerLink="/admin" class="text-aqua hover:underline max-[820px]:hidden">مدیریت</a>
+            }
             <button type="button" class="cursor-pointer text-mut hover:text-fg" (click)="logout()">خروج</button>
           </span>
         } @else {
