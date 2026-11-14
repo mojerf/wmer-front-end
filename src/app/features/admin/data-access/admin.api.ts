@@ -58,7 +58,8 @@ export class AdminApi {
     if (search) {
       params = params.set('search', search);
     }
-    return this.http.get<PaginatedDto<ContentRowDto>>(`${this.api}/${type}`, { params }).pipe(
+    // `no-store`: the public lists may be cached briefly by browsers, but an admin must see their own edits at once.
+    return this.http.get<PaginatedDto<ContentRowDto>>(`${this.api}/${type}`, { params, cache: 'no-store' }).pipe(
       map((dto) =>
         toPage(dto, (row) => ({
           id: row.id,
