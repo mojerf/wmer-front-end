@@ -14,4 +14,6 @@ export interface OrderDto {
   total_price: number;
   status: 'pending' | 'processing' | 'completed' | 'cancelled';
   created_at: string;
+  /** The signed-in customer can pay this order now. */
+  can_pay?: boolean;
 }

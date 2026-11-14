@@ -10,6 +10,7 @@ export const toOrder = (dto: OrderDto): Order => ({
   status: dto.status,
   total: dto.total_price,
   createdAt: dto.created_at,
+  canPay: dto.can_pay ?? false,
   lines: dto.products.map((line) => ({
     id: line.id,
     title: line.title,

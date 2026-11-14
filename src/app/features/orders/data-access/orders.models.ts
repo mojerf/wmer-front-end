@@ -31,5 +31,7 @@ export interface Order {
   status: OrderStatus;
   total: number;
   createdAt: string;
+  /** The customer can pay this order now (it is pending). */
+  canPay: boolean;
   lines: readonly OrderLine[];
 }

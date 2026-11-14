@@ -14,6 +14,8 @@ export abstract class OrdersApi {
   abstract create(productIds: readonly number[]): Observable<Order>;
   abstract mine(page: number): Observable<Page<Order>>;
   abstract get(id: number): Observable<Order>;
+  /** Starts paying an order. `url` is where to send the customer; null when nothing had to be paid. */
+  abstract pay(id: number): Observable<{ url: string | null; order: Order }>;
 }
 
 @Injectable()
@@ -36,6 +38,12 @@ export class HttpOrdersApi extends OrdersApi {
   get(id: number): Observable<Order> {
     return this.http.get<{ data: OrderDto }>(`${this.base}/${id}`).pipe(map((res) => toOrder(res.data)));
   }
+
+  pay(id: number): Observable<{ url: string | null; order: Order }> {
+    return this.http
+      .post<{ payment_url: string | null; order: { data?: OrderDto } & OrderDto }>(`${this.base}/${id}/pay`, {})
+      .pipe(map((res) => ({ url: res.payment_url, order: toOrder(res.order.data ?? res.order) })));
+  }
 }
 
 /** In-memory orders used while `useMockApi` is on. */
@@ -49,6 +57,7 @@ export class MockOrdersApi extends OrdersApi {
       status: 'pending',
       total: productIds.length * 100_000,
       createdAt: new Date().toISOString(),
+      canPay: true,
       lines: productIds.map((id) => ({
         id,
         title: `محصول ${id}`,
@@ -69,5 +78,15 @@ export class MockOrdersApi extends OrdersApi {
   get(id: number): Observable<Order> {
     const found = this.orders.find((o) => o.id === id);
     return found ? of(found) : throwError(() => new ApiError(404, 'Not found'));
+  }
+
+  pay(id: number): Observable<{ url: string | null; order: Order }> {
+    const index = this.orders.findIndex((o) => o.id === id);
+    if (index < 0) {
+      return throwError(() => new ApiError(404, 'Not found'));
+    }
+    const paid: Order = { ...this.orders[index]!, status: 'completed', canPay: false };
+    this.orders[index] = paid;
+    return of({ url: null, order: paid });
   }
 }

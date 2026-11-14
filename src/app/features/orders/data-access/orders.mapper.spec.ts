@@ -25,6 +25,11 @@ describe('toOrder', () => {
     expect(order.lines[0]).toMatchObject({ title: 'P0', price: 100, downloadLink: 'https://files.example.test/a.zip' });
   });
 
+  it('reads whether the order can be paid', () => {
+    expect(toOrder({ ...dto([]), can_pay: true }).canPay).toBe(true);
+    expect(toOrder(dto([])).canPay).toBe(false);
+  });
+
   it('only keeps https download links', () => {
     const order = toOrder(
       dto(['javascript:alert(1)', 'http://insecure.test/a.zip', 'data:text/html,x', null, 'HTTPS://ok.test/a.zip']),
