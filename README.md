@@ -86,4 +86,4 @@ Styling is Tailwind only, with sizes in `rem`. Design tokens (colors, animations
 
 ## License
 
-Not decided yet — add a `LICENSE` file before treating the repository as open source.
+[MIT](LICENSE)
