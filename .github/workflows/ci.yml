@@ -4,6 +4,7 @@ on:
   push:
     branches: [main]
   pull_request:
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -29,6 +30,14 @@ jobs:
       - run: npm run lint
       - run: npm test -- --no-watch
       - run: npm run build
+
+      - name: Smoke-test the SSR server
+        run: |
+          PORT=4000 node dist/wmer-front-end/server/server.mjs &
+          for i in $(seq 1 20); do curl -fs http://localhost:4000/robots.txt >/dev/null && break; sleep 1; done
+          curl -fs http://localhost:4000/about | grep -q "<title>"
+          curl -fsI http://localhost:4000/about | grep -i "content-security-policy"
+          curl -fs http://localhost:4000/robots.txt | grep -q "Sitemap:"
 
       - name: Audit production dependencies
         run: npm audit --omit=dev --audit-level=high
