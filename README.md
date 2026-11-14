@@ -1,5 +1,14 @@
 # wmer — front end
 
+[![CI](https://github.com/mojerf/wmer-front-end/actions/workflows/ci.yml/badge.svg)](https://github.com/mojerf/wmer-front-end/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/mojerf/wmer-front-end/graph/badge.svg)](https://codecov.io/gh/mojerf/wmer-front-end)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Angular](https://img.shields.io/badge/Angular-22-dd0031?logo=angular&logoColor=white)](https://angular.dev)
+[![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178c6?logo=typescript&logoColor=white)](https://www.typescriptlang.org)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-06b6d4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
+[![SSR](https://img.shields.io/badge/SSR-enabled-success)](#architecture)
+[![Last commit](https://img.shields.io/github/last-commit/mojerf/wmer-front-end)](https://github.com/mojerf/wmer-front-end/commits/main)
+
 Personal website of Mojtaba Erfanrad (Persian, RTL). Angular 22 with server-side rendering,
 Tailwind CSS 4, signals and zoneless change detection. The Laravel API lives in
 [wmer-back-end](https://github.com/mojerf/wmer-back-end).

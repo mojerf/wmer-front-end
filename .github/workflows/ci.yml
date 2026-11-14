@@ -28,7 +28,16 @@ jobs:
 
       - run: npm ci
       - run: npm run lint
-      - run: npm test -- --no-watch
+      - name: Unit tests with coverage
+        run: npm test -- --no-watch --coverage --coverage-reporters=lcov --coverage-reporters=text-summary
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          files: coverage/wmer-front-end/lcov.info
+          flags: front-end
+          token: ${{ secrets.CODECOV_TOKEN }}
+          fail_ci_if_error: false
       - run: npm run build
 
       - name: Smoke-test the SSR server
