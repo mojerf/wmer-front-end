@@ -6,16 +6,17 @@ import { FaNumberPipe } from '../../shared/pipes/fa-number.pipe';
 import { RelativeTimePipe } from '../../shared/pipes/relative-time.pipe';
 import { AdminApi } from './data-access/admin.api';
 import { CONTENT_SCHEMAS, ContentRow, isContentType } from './data-access/admin.models';
+import { IconComponent } from '../../shared/ui/icon/icon.component';
 
 @Component({
   selector: 'app-admin-content-list-page',
-  imports: [RouterLink, FaNumberPipe, RelativeTimePipe],
+  imports: [RouterLink, FaNumberPipe, RelativeTimePipe, IconComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     @if (schema(); as schema) {
       <div class="flex flex-wrap items-center justify-between gap-3">
         <h1 class="text-[clamp(1.5rem,3.5vw,2rem)] font-black tracking-[-0.02em]">{{ schema.plural }}</h1>
-        <a [routerLink]="['/admin/content', schema.type, 'new']" class="btn btn-main">افزودن {{ schema.singular }}</a>
+        <a [routerLink]="['/admin/content', schema.type, 'new']" class="btn btn-main"><app-icon name="plus" /> افزودن {{ schema.singular }}</a>
       </div>
 
       <input
@@ -47,8 +48,8 @@ import { CONTENT_SCHEMAS, ContentRow, isContentType } from './data-access/admin.
                 </span>
               </span>
               <span class="flex shrink-0 items-center gap-2">
-                <a [routerLink]="['/admin/content', schema.type, row.id]" class="btn">ویرایش</a>
-                <button type="button" class="btn cursor-pointer !text-rose" (click)="remove(row)">حذف</button>
+                <a [routerLink]="['/admin/content', schema.type, row.id]" class="icon-btn hover:!text-fg" [attr.aria-label]="'ویرایش ' + row.title" title="ویرایش"><app-icon name="edit" /></a>
+                <button type="button" class="icon-btn hover:!border-rose hover:!text-rose" [attr.aria-label]="'حذف ' + row.title" title="حذف" (click)="remove(row)"><app-icon name="trash" /></button>
               </span>
             </li>
           } @empty {
@@ -58,7 +59,7 @@ import { CONTENT_SCHEMAS, ContentRow, isContentType } from './data-access/admin.
 
         @if (page.lastPage > 1) {
           <nav class="mt-6 flex items-center justify-center gap-3" aria-label="صفحه‌بندی">
-            <button type="button" class="btn cursor-pointer" [disabled]="page.page <= 1" (click)="go(page.page - 1)">قبلی</button>
+            <button type="button" class="btn cursor-pointer" [disabled]="page.page <= 1" (click)="go(page.page - 1)"><app-icon name="arrow-back" /> قبلی</button>
             <span class="text-[0.875rem] text-mut">صفحه‌ی {{ page.page | faNumber }} از {{ page.lastPage | faNumber }}</span>
             <button type="button" class="btn cursor-pointer" [disabled]="page.page >= page.lastPage" (click)="go(page.page + 1)">بعدی</button>
           </nav>

@@ -53,9 +53,9 @@ const excerpt = (text: string, max = 160): string => {
 
           <div class="mt-5 flex flex-wrap gap-3">
             @if (cart.has(p.id)) {
-              <a routerLink="/cart" class="btn btn-main">در سبد خرید است · مشاهده <app-icon name="arrow" /></a>
+              <a routerLink="/cart" class="btn btn-main"><app-icon name="check" /> در سبد خرید است · مشاهده سبد</a>
             } @else {
-              <button type="button" class="btn btn-main cursor-pointer" (click)="add()">افزودن به سبد خرید</button>
+              <button type="button" class="btn btn-main cursor-pointer" (click)="add()"><app-icon name="cart-plus" /> افزودن به سبد خرید</button>
             }
           </div>
           <p class="mt-3 text-[0.8125rem] text-mut">پس از تکمیل سفارش، لینک دانلود در صفحه‌ی «سفارش‌های من» فعال می‌شود.</p>

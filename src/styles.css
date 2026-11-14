@@ -208,6 +208,19 @@ textarea.input-field {
   transform: translateX(-0.25rem);
 }
 
+/* Round icon-only button (header actions, row actions). Always give it an aria-label. */
+@utility icon-btn {
+  @apply relative inline-grid size-9 shrink-0 cursor-pointer place-items-center rounded-full border border-line text-mut no-underline transition-colors hover:text-fg;
+}
+
+/* Drop-down panels (user menu, mobile menu) */
+@utility menu-panel {
+  @apply absolute top-[calc(100%+0.75rem)] z-40 grid gap-0.5 rounded-[1.25rem] border border-line bg-bg p-1.5 text-[0.875rem] shadow-[0_1.5rem_3rem_-1rem_rgb(0_0_0/0.35)];
+}
+@utility menu-item {
+  @apply flex items-center gap-3 rounded-[0.875rem] px-3 py-2.5 text-start text-fg no-underline transition-colors hover:bg-line;
+}
+
 @utility btn-main {
   @apply border-transparent bg-fg text-bg;
 }

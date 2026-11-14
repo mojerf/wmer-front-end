@@ -72,7 +72,7 @@ import { WorksListData } from './data-access/works.resolvers';
         @if (data().works.lastPage > 1) {
           <nav class="mt-8 flex items-center justify-center gap-3" aria-label="صفحه‌بندی">
             @if (data().works.page > 1) {
-              <a class="btn" routerLink="/works" [queryParams]="pageParams(data().works.page - 1)" rel="prev">قبلی</a>
+              <a class="btn" routerLink="/works" [queryParams]="pageParams(data().works.page - 1)" rel="prev"><app-icon name="arrow-back" /> قبلی</a>
             }
             <span class="text-[0.875rem] text-mut">
               صفحه‌ی {{ data().works.page | faNumber }} از {{ data().works.lastPage | faNumber }}

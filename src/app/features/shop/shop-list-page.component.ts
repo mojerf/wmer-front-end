@@ -85,7 +85,7 @@ import { ShopListData } from './data-access/shop.resolvers';
         @if (data().products.lastPage > 1) {
           <nav class="mt-8 flex items-center justify-center gap-3" aria-label="صفحه‌بندی">
             @if (data().products.page > 1) {
-              <a class="btn" routerLink="/shop" [queryParams]="pageParams(data().products.page - 1)" rel="prev">قبلی</a>
+              <a class="btn" routerLink="/shop" [queryParams]="pageParams(data().products.page - 1)" rel="prev"><app-icon name="arrow-back" /> قبلی</a>
             }
             <span class="text-[0.875rem] text-mut">
               صفحه‌ی {{ data().products.page | faNumber }} از {{ data().products.lastPage | faNumber }}

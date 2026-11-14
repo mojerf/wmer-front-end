@@ -43,7 +43,7 @@ import { ORDER_STATUS_CLASSES, ORDER_STATUS_LABELS, Order } from './data-access/
         @if (orders().lastPage > 1) {
           <nav class="mt-8 flex items-center justify-center gap-3" aria-label="صفحه‌بندی">
             @if (orders().page > 1) {
-              <a class="btn" routerLink="/orders" [queryParams]="{ page: orders().page > 2 ? orders().page - 1 : null }" rel="prev">قبلی</a>
+              <a class="btn" routerLink="/orders" [queryParams]="{ page: orders().page > 2 ? orders().page - 1 : null }" rel="prev"><app-icon name="arrow-back" /> قبلی</a>
             }
             <span class="text-[0.875rem] text-mut">صفحه‌ی {{ orders().page | faNumber }} از {{ orders().lastPage | faNumber }}</span>
             @if (orders().page < orders().lastPage) {

@@ -30,7 +30,7 @@ import { OrdersApi } from './data-access/orders.api';
                 <a [routerLink]="['/shop', item.slug]" class="font-bold hover:text-aqua">{{ item.title }}</a>
                 <p class="mt-0.5 text-[0.875rem] text-mut">{{ item.price | faNumber }} تومان</p>
               </div>
-              <button type="button" class="cursor-pointer text-[0.8125rem] text-mut hover:text-rose" (click)="cart.remove(item.id)">حذف</button>
+              <button type="button" class="icon-btn hover:!border-rose hover:!text-rose" [attr.aria-label]="'حذف ' + item.title + ' از سبد'" title="حذف از سبد" (click)="cart.remove(item.id)"><app-icon name="trash" /></button>
             </li>
           }
         </ul>

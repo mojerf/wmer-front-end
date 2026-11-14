@@ -6,10 +6,11 @@ import { FaNumberPipe } from '../../shared/pipes/fa-number.pipe';
 import { RelativeTimePipe } from '../../shared/pipes/relative-time.pipe';
 import { AdminApi } from './data-access/admin.api';
 import { AdminOrder } from './data-access/admin.models';
+import { IconComponent } from '../../shared/ui/icon/icon.component';
 
 @Component({
   selector: 'app-admin-orders-page',
-  imports: [FaNumberPipe, RelativeTimePipe],
+  imports: [FaNumberPipe, RelativeTimePipe, IconComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <h1 class="text-[clamp(1.5rem,3.5vw,2rem)] font-black tracking-[-0.02em]">سفارش‌ها</h1>
@@ -46,7 +47,7 @@ import { AdminOrder } from './data-access/admin.models';
 
       @if (page.lastPage > 1) {
         <nav class="mt-6 flex items-center justify-center gap-3" aria-label="صفحه‌بندی">
-          <button type="button" class="btn cursor-pointer" [disabled]="page.page <= 1" (click)="pageNumber.set(page.page - 1)">قبلی</button>
+          <button type="button" class="btn cursor-pointer" [disabled]="page.page <= 1" (click)="pageNumber.set(page.page - 1)"><app-icon name="arrow-back" /> قبلی</button>
           <span class="text-[0.875rem] text-mut">صفحه‌ی {{ page.page | faNumber }} از {{ page.lastPage | faNumber }}</span>
           <button type="button" class="btn cursor-pointer" [disabled]="page.page >= page.lastPage" (click)="pageNumber.set(page.page + 1)">بعدی</button>
         </nav>

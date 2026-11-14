@@ -84,7 +84,7 @@ describe('CartPageComponent', () => {
   it('removes an item', async () => {
     const { fixture, el, cart } = await setup();
 
-    [...el.querySelectorAll('button')].find((b) => b.textContent?.includes('حذف'))!.click();
+    el.querySelector<HTMLButtonElement>('button[aria-label^="حذف"]')!.click();
     fixture.detectChanges();
 
     expect(cart.count()).toBe(1);

@@ -13,13 +13,14 @@ import { SITE } from '../../core/config/site.config';
 import { errorMessage, fieldError } from '../../core/http/api-errors';
 import { SeoService } from '../../core/seo/seo.service';
 import { FieldComponent } from '../../shared/ui/field/field.component';
+import { IconComponent } from '../../shared/ui/icon/icon.component';
 
 const passwordsMatch = (group: AbstractControl): ValidationErrors | null =>
   group.get('password')?.value === group.get('passwordConfirmation')?.value ? null : { mismatch: true };
 
 @Component({
   selector: 'app-register-page',
-  imports: [ReactiveFormsModule, RouterLink, FieldComponent],
+  imports: [ReactiveFormsModule, RouterLink, FieldComponent, IconComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section class="wrap grid max-w-[30rem] gap-6 py-[4rem]">
@@ -59,6 +60,7 @@ const passwordsMatch = (group: AbstractControl): ValidationErrors | null =>
         }
 
         <button type="submit" class="btn btn-main w-full cursor-pointer" [disabled]="submitting()">
+          <app-icon name="user-plus" />
           {{ submitting() ? 'در حال ساخت حساب…' : 'ساخت حساب' }}
         </button>
       </form>

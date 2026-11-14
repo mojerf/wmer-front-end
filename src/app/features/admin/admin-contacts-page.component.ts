@@ -5,10 +5,11 @@ import { FaNumberPipe } from '../../shared/pipes/fa-number.pipe';
 import { RelativeTimePipe } from '../../shared/pipes/relative-time.pipe';
 import { AdminApi } from './data-access/admin.api';
 import { AdminContact } from './data-access/admin.models';
+import { IconComponent } from '../../shared/ui/icon/icon.component';
 
 @Component({
   selector: 'app-admin-contacts-page',
-  imports: [FaNumberPipe, RelativeTimePipe],
+  imports: [FaNumberPipe, RelativeTimePipe, IconComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <h1 class="text-[clamp(1.5rem,3.5vw,2rem)] font-black tracking-[-0.02em]">پیام‌ها</h1>
@@ -25,7 +26,7 @@ import { AdminContact } from './data-access/admin.models';
           <li class="grid gap-1 rounded-[1.25rem] border border-line bg-card p-4">
             <div class="flex flex-wrap items-center justify-between gap-2">
               <b>{{ contact.title }}</b>
-              <button type="button" class="btn cursor-pointer !text-rose" (click)="remove(contact)">حذف</button>
+              <button type="button" class="icon-btn hover:!border-rose hover:!text-rose" aria-label="حذف پیام" title="حذف" (click)="remove(contact)"><app-icon name="trash" /></button>
             </div>
             <p class="text-[0.8125rem] text-mut">
               <bdi dir="ltr">{{ contact.email }}</bdi>
@@ -43,7 +44,7 @@ import { AdminContact } from './data-access/admin.models';
 
       @if (page.lastPage > 1) {
         <nav class="mt-6 flex items-center justify-center gap-3" aria-label="صفحه‌بندی">
-          <button type="button" class="btn cursor-pointer" [disabled]="page.page <= 1" (click)="pageNumber.set(page.page - 1)">قبلی</button>
+          <button type="button" class="btn cursor-pointer" [disabled]="page.page <= 1" (click)="pageNumber.set(page.page - 1)"><app-icon name="arrow-back" /> قبلی</button>
           <span class="text-[0.875rem] text-mut">صفحه‌ی {{ page.page | faNumber }} از {{ page.lastPage | faNumber }}</span>
           <button type="button" class="btn cursor-pointer" [disabled]="page.page >= page.lastPage" (click)="pageNumber.set(page.page + 1)">بعدی</button>
         </nav>

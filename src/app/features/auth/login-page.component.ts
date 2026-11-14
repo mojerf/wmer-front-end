@@ -7,10 +7,11 @@ import { SITE } from '../../core/config/site.config';
 import { errorMessage, fieldError } from '../../core/http/api-errors';
 import { SeoService } from '../../core/seo/seo.service';
 import { FieldComponent } from '../../shared/ui/field/field.component';
+import { IconComponent } from '../../shared/ui/icon/icon.component';
 
 @Component({
   selector: 'app-login-page',
-  imports: [ReactiveFormsModule, RouterLink, FieldComponent],
+  imports: [ReactiveFormsModule, RouterLink, FieldComponent, IconComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section class="wrap grid max-w-[28rem] gap-6 py-[4rem]">
@@ -33,6 +34,7 @@ import { FieldComponent } from '../../shared/ui/field/field.component';
         }
 
         <button type="submit" class="btn btn-main w-full cursor-pointer" [disabled]="submitting()">
+          <app-icon name="login" />
           {{ submitting() ? 'در حال ورود…' : 'ورود' }}
         </button>
 

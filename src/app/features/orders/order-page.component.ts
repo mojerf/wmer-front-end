@@ -10,10 +10,11 @@ import { RelativeTimePipe } from '../../shared/pipes/relative-time.pipe';
 import { OrdersApi } from './data-access/orders.api';
 import { isTrustedGatewayUrl } from './data-access/gateway-url';
 import { ORDER_STATUS_CLASSES, ORDER_STATUS_LABELS, Order } from './data-access/orders.models';
+import { IconComponent } from '../../shared/ui/icon/icon.component';
 
 @Component({
   selector: 'app-order-page',
-  imports: [RouterLink, FaNumberPipe, RelativeTimePipe],
+  imports: [RouterLink, FaNumberPipe, RelativeTimePipe, IconComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     @let o = order();
@@ -60,7 +61,7 @@ import { ORDER_STATUS_CLASSES, ORDER_STATUS_LABELS, Order } from './data-access/
               <p class="mt-0.5 text-[0.875rem] text-mut">{{ line.price | faNumber }} تومان</p>
             </div>
             @if (line.downloadLink) {
-              <a class="btn btn-main min-h-9 px-4 text-[0.8125rem]" [href]="line.downloadLink" target="_blank" rel="noopener noreferrer">دانلود</a>
+              <a class="btn btn-main min-h-9 px-4 text-[0.8125rem]" [href]="line.downloadLink" target="_blank" rel="noopener noreferrer"><app-icon name="download" />دانلود</a>
             } @else if (o.status !== 'cancelled') {
               <span class="text-[0.8125rem] text-mut">لینک پس از پرداخت فعال می‌شود</span>
             }
@@ -76,6 +77,7 @@ import { ORDER_STATUS_CLASSES, ORDER_STATUS_LABELS, Order } from './data-access/
       @if (o.canPay) {
         <div class="mt-4">
           <button type="button" class="btn btn-main cursor-pointer" [disabled]="paying()" (click)="pay()">
+            <app-icon name="card" />
             {{ paying() ? 'در حال انتقال به درگاه…' : 'پرداخت ' + (o.total | faNumber) + ' تومان' }}
           </button>
           @if (error()) {

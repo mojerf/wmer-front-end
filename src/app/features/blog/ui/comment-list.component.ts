@@ -1,11 +1,12 @@
 import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 import { RelativeTimePipe } from '../../../shared/pipes/relative-time.pipe';
 import { PostComment } from '../data-access/blog.models';
+import { IconComponent } from '../../../shared/ui/icon/icon.component';
 
 /** Comments with their replies. Text is always rendered as text (never HTML). */
 @Component({
   selector: 'app-comment-list',
-  imports: [RelativeTimePipe],
+  imports: [RelativeTimePipe, IconComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <ul class="grid gap-4">
@@ -25,10 +26,10 @@ import { PostComment } from '../data-access/blog.models';
           @if (allowReply() || comment.canDelete) {
             <div class="mt-2 flex gap-4 text-[0.8125rem] text-mut">
               @if (allowReply()) {
-                <button type="button" class="cursor-pointer hover:text-fg" (click)="reply.emit(comment)">پاسخ</button>
+                <button type="button" class="inline-flex cursor-pointer items-center gap-1.5 hover:text-fg" (click)="reply.emit(comment)"><app-icon name="reply" />پاسخ</button>
               }
               @if (comment.canDelete) {
-                <button type="button" class="cursor-pointer hover:text-rose" (click)="remove.emit(comment)">حذف</button>
+                <button type="button" class="inline-flex cursor-pointer items-center gap-1.5 hover:text-rose" aria-label="حذف نظر" (click)="remove.emit(comment)"><app-icon name="trash" />حذف</button>
               }
             </div>
           }

@@ -73,7 +73,7 @@ import { BlogListData } from './data-access/blog.resolvers';
           <nav class="mt-8 flex items-center justify-center gap-3" aria-label="صفحه‌بندی">
             @if (data().posts.page > 1) {
               <a class="btn" routerLink="/blog" [queryParams]="pageParams(data().posts.page - 1)" rel="prev">
-                قبلی
+                <app-icon name="arrow-back" /> قبلی
               </a>
             }
             <span class="text-[0.875rem] text-mut">
