@@ -1,14 +1,16 @@
 import { NgTemplateOutlet } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { RevealDirective } from '../../../shared/directives/reveal.directive';
 import { SpotlightDirective } from '../../../shared/directives/spotlight.directive';
+import { IconComponent } from '../../../shared/ui/icon/icon.component';
 import { SectionHeadComponent } from '../../../shared/ui/section-head/section-head.component';
 import { Work } from '../data-access/home.models';
 import { decorAt, LIGHTHOUSE_BARS } from '../home.content';
 
 @Component({
   selector: 'app-works-section',
-  imports: [SectionHeadComponent, RevealDirective, SpotlightDirective, NgTemplateOutlet],
+  imports: [SectionHeadComponent, RevealDirective, SpotlightDirective, NgTemplateOutlet, RouterLink, IconComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: { class: 'wrap block pt-[5.625rem]', id: 'works' },
   template: `
@@ -20,6 +22,7 @@ import { decorAt, LIGHTHOUSE_BARS } from '../home.content';
     >
       @if (featured(); as work) {
         <article appSpotlight appReveal class="card col-span-2 min-[820px]:col-span-4 min-[820px]:row-span-2">
+          <a [routerLink]="['/works', work.slug]" class="absolute inset-0 z-10" [attr.aria-label]="work.title"></a>
           <ng-container *ngTemplateOutlet="thumb; context: { $implicit: work, index: 0 }" />
           <h3 class="text-[1.1875rem] font-bold">{{ work.title }}</h3>
           <div class="flex flex-wrap gap-y-2 pt-1.5">
@@ -56,6 +59,7 @@ import { decorAt, LIGHTHOUSE_BARS } from '../home.content';
 
       @for (work of others(); track work.id; let i = $index) {
         <article appSpotlight [appReveal]="i * 90" class="card col-span-2">
+          <a [routerLink]="['/works', work.slug]" class="absolute inset-0 z-10" [attr.aria-label]="work.title"></a>
           <ng-container *ngTemplateOutlet="thumb; context: { $implicit: work, index: i + 1 }" />
           <h3 class="text-[1.1875rem] font-bold">{{ work.title }}</h3>
           <p class="text-[0.875rem] text-mut">{{ work.tags.join('، ') }}</p>
@@ -73,6 +77,8 @@ import { decorAt, LIGHTHOUSE_BARS } from '../home.content';
         <p class="text-[0.875rem] text-mut">ساخت محصول از ایده تا اجرا.</p>
       </article>
     </div>
+
+    <a routerLink="/works" class="btn mt-6">همه‌ی نمونه‌کارها <app-icon name="arrow" /></a>
 
     <ng-template #thumb let-work let-index="index">
       <div

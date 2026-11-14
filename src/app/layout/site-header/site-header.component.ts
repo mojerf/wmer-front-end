@@ -89,7 +89,7 @@ export class SiteHeaderComponent {
   private readonly router = inject(Router);
 
   protected readonly links = [
-    { route: '/', fragment: 'works', label: 'نمونه‌کارها' },
+    { route: '/works', fragment: undefined, label: 'نمونه‌کارها' },
     { route: '/blog', fragment: undefined, label: 'وبلاگ' },
     { route: '/shop', fragment: undefined, label: 'فروشگاه' },
     { route: '/about', fragment: undefined, label: 'درباره' },

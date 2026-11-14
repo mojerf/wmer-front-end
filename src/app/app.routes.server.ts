@@ -18,6 +18,20 @@ export const serverRoutes: ServerRoute[] = [
   { path: 'about', renderMode: RenderMode.Prerender },
   { path: 'contact', renderMode: RenderMode.Prerender },
   {
+    path: 'works',
+    renderMode: RenderMode.Server,
+    headers: {
+      'Cache-Control': 'public, max-age=0, s-maxage=300, stale-while-revalidate=600',
+    },
+  },
+  {
+    path: 'works/:slug',
+    renderMode: RenderMode.Server,
+    headers: {
+      'Cache-Control': 'public, max-age=0, s-maxage=300, stale-while-revalidate=600',
+    },
+  },
+  {
     path: 'blog',
     renderMode: RenderMode.Server,
     headers: {

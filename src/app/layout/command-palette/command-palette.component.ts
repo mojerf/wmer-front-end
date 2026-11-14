@@ -80,7 +80,7 @@ export class CommandPaletteComponent {
   protected readonly active = signal(0);
 
   private readonly commands: readonly Command[] = [
-    { label: 'نمونه‌کارها', hint: 'G W', run: () => this.goTo('works') },
+    { label: 'نمونه‌کارها', hint: 'G W', run: () => void this.router.navigate(['/works']) },
     { label: 'وبلاگ', hint: 'G B', run: () => void this.router.navigate(['/blog']) },
     { label: 'فروشگاه', hint: 'G S', run: () => void this.router.navigate(['/shop']) },
     { label: 'سبد خرید', hint: 'G C', run: () => void this.router.navigate(['/cart']) },
