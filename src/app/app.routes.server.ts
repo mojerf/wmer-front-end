@@ -28,6 +28,24 @@ export const serverRoutes: ServerRoute[] = [
       'Cache-Control': 'public, max-age=0, s-maxage=300, stale-while-revalidate=600',
     },
   },
+  {
+    path: 'shop',
+    renderMode: RenderMode.Server,
+    headers: {
+      'Cache-Control': 'public, max-age=0, s-maxage=300, stale-while-revalidate=600',
+    },
+  },
+  {
+    path: 'shop/:slug',
+    renderMode: RenderMode.Server,
+    headers: {
+      'Cache-Control': 'public, max-age=0, s-maxage=300, stale-while-revalidate=600',
+    },
+  },
+  // Cart and orders are per-visitor too.
+  { path: 'cart', renderMode: RenderMode.Client },
+  { path: 'orders', renderMode: RenderMode.Client },
+  { path: 'orders/:id', renderMode: RenderMode.Client },
   // Account pages are per-visitor and need cookies the server does not have: render them in the browser.
   { path: 'login', renderMode: RenderMode.Client },
   { path: 'register', renderMode: RenderMode.Client },

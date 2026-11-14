@@ -82,8 +82,9 @@ export class CommandPaletteComponent {
   private readonly commands: readonly Command[] = [
     { label: 'نمونه‌کارها', hint: 'G W', run: () => this.goTo('works') },
     { label: 'وبلاگ', hint: 'G B', run: () => void this.router.navigate(['/blog']) },
-    { label: 'فروشگاه', hint: 'G S', run: () => this.goTo('shop') },
-    { label: 'تماس', hint: 'G C', run: () => this.goTo('contact') },
+    { label: 'فروشگاه', hint: 'G S', run: () => void this.router.navigate(['/shop']) },
+    { label: 'سبد خرید', hint: 'G C', run: () => void this.router.navigate(['/cart']) },
+    { label: 'تماس', hint: 'G T', run: () => this.goTo('contact') },
     { label: 'تغییر تم', hint: 'T', run: () => this.theme.toggle() },
     {
       label: 'سورس‌کد در GitHub',

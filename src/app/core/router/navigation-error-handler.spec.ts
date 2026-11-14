@@ -45,6 +45,15 @@ describe('apiNotFoundHandler', () => {
     expect(TestBed.inject(Router).url).toBe('/404');
   });
 
+  it('treats 403 like 404 so resources of other users are not revealed', async () => {
+    setup(403);
+    const harness = await RouterTestingHarness.create();
+
+    await harness.navigateByUrl('/post');
+
+    expect(harness.routeNativeElement?.querySelector('#nf')).toBeTruthy();
+  });
+
   it('does not swallow other API errors', async () => {
     setup(500);
     const harness = await RouterTestingHarness.create();

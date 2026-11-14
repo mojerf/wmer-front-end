@@ -1,14 +1,16 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { RevealDirective } from '../../../shared/directives/reveal.directive';
 import { SpotlightDirective } from '../../../shared/directives/spotlight.directive';
 import { FaNumberPipe } from '../../../shared/pipes/fa-number.pipe';
+import { IconComponent } from '../../../shared/ui/icon/icon.component';
 import { SectionHeadComponent } from '../../../shared/ui/section-head/section-head.component';
 import { Product } from '../data-access/home.models';
 import { decorAt } from '../home.content';
 
 @Component({
   selector: 'app-shop-section',
-  imports: [SectionHeadComponent, RevealDirective, SpotlightDirective, FaNumberPipe],
+  imports: [SectionHeadComponent, RevealDirective, SpotlightDirective, FaNumberPipe, RouterLink, IconComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: { class: 'wrap block pt-[5.625rem]', id: 'shop' },
   template: `
@@ -17,6 +19,7 @@ import { decorAt } from '../home.content';
     <div class="grid gap-[0.875rem] sm:grid-cols-2" aria-labelledby="shop-title">
       @for (product of products(); track product.id; let i = $index) {
         <article appSpotlight [appReveal]="i * 90" class="card">
+          <a [routerLink]="['/shop', product.slug]" class="absolute inset-0 z-10" [attr.aria-label]="product.title"></a>
           <div
             class="-mx-1.5 -mt-1.5 mb-4 grid h-[6.875rem] place-items-center overflow-hidden rounded-2xl text-[2.75rem]"
             [class]="product.imageUrl ? 'bg-bg-2' : decor(i).gradient"
@@ -37,11 +40,13 @@ import { decorAt } from '../home.content';
                 <span class="ms-2 rounded-full bg-rose/15 px-2 py-0.5 text-[0.6875rem] text-rose">تخفیف</span>
               }
             </div>
-            <button type="button" class="btn btn-main min-h-9 cursor-pointer px-4 text-[0.8125rem]">خرید</button>
+            <span class="text-[0.8125rem] text-aqua">مشاهده</span>
           </div>
         </article>
       }
     </div>
+
+    <a routerLink="/shop" class="btn mt-6">همه‌ی محصولات <app-icon name="arrow" /></a>
   `,
 })
 export class ShopSectionComponent {

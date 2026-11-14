@@ -10,3 +10,15 @@ export const guestOnly: CanActivateFn = () => {
     .restore()
     .pipe(map((user) => (user ? router.parseUrl('/') : true)));
 };
+
+/** Pages that need an account: visitors are sent to sign in and brought back afterwards. */
+export const requireAuth: CanActivateFn = (_route, state) => {
+  const router = inject(Router);
+  return inject(AuthService)
+    .restore()
+    .pipe(
+      map((user) =>
+        user ? true : router.createUrlTree(['/login'], { queryParams: { redirect: state.url } }),
+      ),
+    );
+};
